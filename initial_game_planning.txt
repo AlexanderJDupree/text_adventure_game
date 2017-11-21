@@ -1,0 +1,132 @@
+
+room 1:
+    description: i.e. wake up in cave. there's 2 choices, left tunel, right tunnel.
+    you have 1 bandages, some matches, rock, and clothes.(create objects of these and add them to inventory.)
+
+    choose left or right
+
+    right: theres a cliff you didn't see it. you fell and broek your legs you have a miserable and slow death.
+    ROOM 2
+    left: waterfall room: (parse a waterfall)
+        options:
+        check behind waterfall - locked door
+        look at your surroundings - more description of room
+        examine corpse - tells you not to drink water
+        pick up stick (add to inventory)
+        drink water - DEATH slow and painful
+        offshoot to the right - room w/ first encounter
+        move backward to previous room.
+
+    ROOM 3
+    initial description: it's dark you hear growling
+    initial options:
+        turn back
+        light torch - new description of room
+        yell loudly - death, horrible and slow
+        walk blindly forward - death, horrible and slow
+    second description: theres a wolf chewing on an old corpse
+        options:
+        turn back
+        try to pet it - death
+        scream at it - it approches you if you have torch you can fight it off
+        throw torch at it - now you don't have a torch dummy you die
+
+        sneak past it - it doens't mind you becuase it already has a meal.  - leads to next room
+
+        fight it with torch - you get bit (decrease health) but succesfully scare it off - allows you to examine corpse. find bullets
+    #Figure out way to use items in inventory
+    ROOM 4:
+        initial description:
+            dead dude in cornet with lab coat.
+            suspicious pile of leaves in front of you.
+
+        options:
+            go back -
+            examine corpse - you stroll past leaves get caught and diein bear trap.
+            jump over leaves - second options
+            examine leaves - reveals bear trap - second options
+            kick the leaves - death
+        second options:
+            go back - (didn't revel bear trap you forget to jump over leaves again, and you die)
+            examine corpse - find code to door, note(object?), and guns.
+        new options -
+            go back - didn't reveal bear trap you forget to jump over leaves again, and you die)
+            check gun -
+            examine corpse again -
+            take dudes arm -
+    ROOM 3:
+        if snuck past wolf:
+            description:
+            options:
+            point your gun at it - you have no bullets dummy, it eats you
+
+            throw the guys arm past the wolf - wolf takes the bait and you get away!
+
+            fight it with torch - you get bit (decrease health) but succesfully scare it off - allows you to examine corpse. find bullets
+        if fought wolf first time:
+            room is empty, some wolf droppings
+
+    ROOM 2:
+        if fought wolf first time:
+            wolf is by the waterfall nursing his wounds he hasn't noticed you yet
+        1st options:
+            go back -
+            shoot the wolf - checks object for bullet attribute
+                death or wolf dies depending on bullet count
+            throw the dudes arm - peaceful resuloution
+
+            try to sneak past wolf - it's a wolf and you stink. it notices you - trigger second options
+
+        if snuck past wolf and fought it second time:
+            1st options and description
+        if snuck past wolf and used the arm:
+            waterfall description options:
+                go back -
+                drink water -
+                examine corpse -
+                examine waterfall -
+                    waterfall door options
+
+    waterfall door:
+        description
+        keypad - 3 attempts to enter the right code or it'll shock you to death
+
+        correct code opens boss encounter
+
+    BOSS ROOM:
+        Theres a fucking bear!
+        and bodies.
+
+        bullet and full health:
+            shoot bear in the eye you're lucky- room options
+
+        bullet and half health
+            shoot bear in the eye you're lucky- room options
+
+        no bullet and half health:
+            death
+
+        no bullet and full healthL
+            attempt to fight it with torch - you die
+            look around - second options and bear notices you
+            go back - bear notices you and ready to fight next time
+
+            second options:
+                theres a cage - you enter cage and close it third options
+                theres a body - you check body, find knife.
+                kill bear, but die from wounds before rescuers get you
+                theres a chair leg - pick up chair leg preaper to fight, you die
+            cage options:
+                you see the body has appears to be a workign cell phone next to you.
+                bear vigoursly attacks cage.
+                try to grab phone - it eats your arm
+                fend off bear with torch - it doens't like fire buys you time to grab phone
+                curl up in fetal position and cry- not dignified but the bear gets bored and leaves.
+
+        End sequence -
+            rescued
+            died from wounds
+            rescued in the fetal position which is embarrassing
+
+
+        Death sequences -
