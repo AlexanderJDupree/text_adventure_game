@@ -287,7 +287,7 @@ class Room:
     def increment_counter(self):
         self.counter += 1
 
-    def keypad(self):  # keypad minigame
+    def keypad(self):  # Need to implement death
         player = Players.get_player("player")
         code = "6824"
         while True:
@@ -345,10 +345,13 @@ class Actions:
     def goto(self):
         player = Players.get_player('player')
         current_room = player.current_room
-        if self.args[0] in current_room.branches:
-            current_room.next_room(self.args[0])
+        if len(self.args) == 0:
+            print("Go where?")
         else:
-            print("\n{} isn't an option".format(self.args[0]))
+            if self.args[0] in current_room.branches:
+                current_room.next_room(self.args[0])
+            else:
+                print("\n{} isn't an option".format(self.args[0]))
 
     # This functions is very specific and basically useless.
     def drink(self):  # Special action for room 'left'
@@ -364,7 +367,8 @@ class Actions:
         else:
             print("\nYou can't do that here.")
 
-    def inventory(self):
+    @staticmethod
+    def inventory():
         player = Players.get_player('player')
         player.read_inventory()
 
@@ -453,6 +457,14 @@ class Actions:
             print("\nYour attack misses!")
         print("{} has {} health remaining".format(enemy.name, enemy.health))
         time.sleep(1)
+
+    def quit(self):
+        print("\nAre you sure you want to quit? Nothing will be saved.")
+        opt = input(">  ").lower()
+        if opt in ('y', 'yes'):  # This prevents use from typing 'you' or any word
+            quit()               # with 'y' and quitting the game.
+        else:
+            print("Returning to game.")
 
 
 class Items:
