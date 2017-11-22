@@ -546,7 +546,7 @@ def main():
 
 def get_input(prompt, current_room, option_list):
     try:
-        action_list = option_list + current_room.room_actions
+        action_list = option_list + current_room.actions
     except AttributeError:
         action_list = option_list
     while True:
