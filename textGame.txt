@@ -42,7 +42,7 @@ boss_room| None
 ROOM:   EVENT:
 start|  None
 left|   None
-right|  death("GAME OVER")
+right|  self.encounter()
 tunnel| self.encounter()
 waterfall| self.keypad()
 boss_room|  self.encounter()
@@ -72,7 +72,7 @@ boss_room|  False|  None
 ROOM:   ENEMIES:
 start|  None
 left|   None
-right|  None
+right|  wolf
 tunnel| wolf
 boss_room|  bear
 waterfall|  None
@@ -99,6 +99,6 @@ WEAPONS:    USES:   FUNCTION:   PICKUP: DMG:    ACC:     DESCRIPTION:
 fists|      1|    None|       False|  15|     70|    They're your own fists, what's there to examine??
 knife|      1|     None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
-claws|      1|    None|       False   20|     60|     Big ass wolf claws
+claws|      1|    None|       False|   20|     60|     Big ass wolf claws
 big_claws   1|    None|       False|  35|     65|     You thought the wolf claws were big??
 *end_weapons

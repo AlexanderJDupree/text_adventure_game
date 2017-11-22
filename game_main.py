@@ -8,12 +8,48 @@
     * game_start.txt is the master game file. textGame.txt is the realtime
          file for use in game
 
+    *reworked Room class __init__ method. Previously Called the parse_file()
+    method for each attribute. Now it'll call parse_file only once.
+
     * started on the combat loop, basically mimics main game loop with a
         different action list.
 
-    * need to add attribute for an equipped weapon for use in combat
+    * Run, fight, and use are all functional in combat loop.
+
+    * Fight has critical hit functionality as well
+
+    * At the end of the combat loop need to add an enemy turn.
+
+    *When combat loop finishes need to add ending sequence as well as a cleanup
+    method to delete the defeated enemy.
+
+    * Tweaked encounter() method in Room class to create an enemy once.
+    Now if player runs away, then returns to the same room he'll be fighting the same enemy he ran away from.
+
+    * When player picks up a weapon, game will now ask the user if he wants to
+    equip that weapon.
+
+    *added equip() method in action class. Player can now equip whatever weapon
+    they have in their inventory by typing 'equip (item)'
+
+    *Add equip into combat action list?? So player can change weapons whenever.
+
+    *Reworked the add_item() and pickup() methods. Now if you pickup an item
+    you already have the game won't instantiate another item and add it to
+    your inventory. Instead, it will increment the number of uses for your
+    item.
+
+    *Reworked the read_inventory() method in the Player class. Now it will
+    print how many of each item is in the inventory. Like Bandages x 3.
 
     * Reworked the input function so it could be used for combat input as well
+
+    *Fixed a bug in the input function, if player pressed enter without
+    inputing any characters the game would crash.
+
+    *Fixed a bug in the input function action list update. The action list
+    would retain all the special room actions and combat actions even when
+    combat was terminated.
 
     * Need to rework the printing of room descriptions. Default terminal
         windows do not support text wrapping. Run a loop on the print statement
@@ -24,15 +60,24 @@
 
     * Need to create help function
 
-    * Need to create make death method functional and dynamic
+    * Need to make death method functional and dynamic
 
-    * Need to populate textGame.txt with actual game elements
+    * Need to populate textGame.txt with actual game text
 
     * Need to create a tutorial or readme.txt file for game
 
     * Look into saving game state
+
+    * I use 'if item in [i.name for i in player.inventory]:' maybe make this a
+    seperate function call check_inventory(self): Returns True or False
+
+    *condense object grabbing in the action methods into a seperate method for ease of use.
+
+    *Look into creating convenience methods for lines of code I reuse alot.
 """
 import csv
+
+from random import randint
 
 
 class Players:
@@ -44,7 +89,7 @@ class Players:
         self.name = name
         self.health = health
         self.inventory = inventory
-        self.dignity = dignity
+        self.dignity = dignity  # Haven't found a use for this attribute yet.
         self.equipped_weapon = None
         self.player_objects.append(self)
 
@@ -57,14 +102,19 @@ class Players:
     # This function is linked to the pickup() function in the action class
     def add_item(self, item):
         self.inventory.append(item)
+        if item in Weapons.weapon_objects:
+            self.equip_weapon(item)
 
     def remove_item(self, item):
         self.inventory.remove(item)
 
-    # def get_item(self, item_name):
-    #     for i in self.inventory:
-    #         if i.name == item_name:
-    #             return i
+    # New function to equip weapons! yay!
+    def equip_weapon(self, item):
+        opt = get_input("\nequip {}? (y or n):  ".format(
+            item.name), None, ['y', 'n'])
+        if opt[0] == 'y':
+            self.equipped_weapon = item
+            print("You equipped {}!\n".format(item.name))
 
     def initialize_inventory(self, player):
         inventory = parse_file('textGame.txt', player, '*player_inventory')
@@ -73,27 +123,49 @@ class Players:
             if attributes == None:
                 attributes = parse_file('textGame.txt', i, '*weapons')
                 weapon_object = Weapons(i, attributes)
-                self.add_item(weapon_object)
+                self.inventory.append(weapon_object)
+                self.equipped_weapon = weapon_object
             else:
                 item_object = Items(i, attributes)
-                self.add_item(item_object)
+                self.inventory.append(item_object)
+
+    def combat(self, enemy):
+        action_list = ['fight', 'use', 'run', 'cry']
+        current_room = Room.get_room()
+        print("\nYou entered combat with {}".format(enemy.name))
+
+        while self.health > 0 and enemy.health > 0:
+            print(self.player_objects)  # For debug purposes
+            print("\nActions:")
+            for action in action_list:
+                if action == 'use':
+                    print('\t' + action.capitalize(), '(item)')
+                else:
+                    print('\t' + action.capitalize())
+            opt = get_input("\n>  ", current_room, action_list)
+            if opt[0] == 'run':
+                if self.run_away() == True:
+                    current_room.next_room(current_room.room_branches[0])
+                    break
+            else:
+                action = Actions(opt[0], opt[1:])
+                action.run_action()
+
+    def run_away(self):
+        # Must roll above a 85 to run away
+        if randint(1, 100) > 85:
+            print("\nYou ran away!")
+            return True
+        else:
+            print("You failed to run away!")
+            return False
+            # run a enemy damage function
 
     @classmethod
     def get_player(cls, name):
         for p in cls.player_objects:
             if name == p.name:
                 return p
-
-    def combat(self, enemy):
-        action_list = ['FIGHT', 'Use (item)', 'Run', 'Cry']
-        print("\nYou entered combat with {}".format(enemy.name))
-        while self.health > 0 and enemy.health > 0:
-            print("\nActions:")
-            for action in action_list:
-                print('\t' + action)
-            opt = get_input("\n>  ", game_room, action_list)
-            action = Actions(opt[0], opt[1:])
-            action.run_action()
 
 
 class Enemy(Players):
@@ -103,10 +175,6 @@ class Enemy(Players):
         super().__init__(self, health=100, inventory=[], dignity=1)
         self.name = name
         self.initialize_inventory(self.name)
-
-    # @classmethod
-    # def enemy_inventory(cls, name):
-    #     pass
 
 
 class Room:
@@ -123,7 +191,7 @@ class Room:
         self.room_title = room_title
         self.description = attributes[0]
         self.room_branches = attributes[1]
-        self.counter = attributes[2]
+        self.counter = int(attributes[2][0])
         self.room_event = attributes[3]
         self.room_items = attributes[4]
         self.room_actions = attributes[5]
@@ -131,12 +199,12 @@ class Room:
         self.room_enemies = attributes[7]
         self.room_objects.append(self)
 
-    def enter_room(self):
+    def enter_room(self):  # Need to rework how we print into blocks and newlines
         if self.lock_description[0] == 'True':
             print('\n' + self.description[int(self.lock_description[1])])
         else:
             try:
-                print('\n' + self.description[int(self.counter[0])])
+                print('\n' + self.description[self.counter])
             except IndexError:
                 print('\n' + self.description[-1])
             self.increment_counter('textGame.txt')
@@ -144,10 +212,12 @@ class Room:
 
     def encounter(self):
         player = Players.get_player('player')
-        enemy = Enemy(self.room_enemies[0])
+        if self.counter >= 1:
+            enemy = Players.get_player(self.room_enemies[0])
+        else:
+            enemy = Enemy(self.room_enemies[0])
         player.combat(enemy)
 
-    # overwrites previous attributes based on room
     def next_room(self, room_title=''):
         keywords = ['*room_descriptions', '*room_branches', '*room_count',
                     '*room_events', '*room_items', '*room_actions',
@@ -157,7 +227,7 @@ class Room:
         self.room_title = room_title
         self.description = attributes[0]
         self.room_branches = attributes[1]
-        self.counter = attributes[2]
+        self.counter = int(attributes[2][0])
         self.room_event = attributes[3]
         self.room_items = attributes[4]
         self.room_actions = attributes[5]
@@ -166,22 +236,20 @@ class Room:
         self.enter_room()
 
     def increment_counter(self, filename):
-        num = self.counter[0]
-        if int(num) == 9:
+        if self.counter == 9:
             return None
         with open(filename, 'r') as f:
             filedata = f.readlines()
             for row in range(len(filedata)):
                 if self.room_title in filedata[row]:
                     filedata[row] = filedata[row].replace(
-                        num, str(int(num) + 1))
+                        str(self.counter), str(self.counter + 1))
         with open('textGame.txt', 'w') as file:
             file.writelines(filedata)
 
     def keypad(self):  # keypad minigame
         player = Players.get_player("player")
         code = "6824"
-
         while True:
             player_attempt = input(
                 "Enter code (type \"back\" to back out):\n>  ")
@@ -189,7 +257,7 @@ class Room:
                 self.next_room('boss_room')
                 break
             elif player_attempt.lower() == "back":
-                self.next_room('left')
+                self.next_room(self.room_branches[0])
                 break
             elif player_attempt.isnumeric():
                 print(
@@ -234,7 +302,21 @@ class Actions:
         player = Players.get_player('player')
         player.read_inventory()
 
+    def equip(self):
+        player = Players.get_player('player')
+        if self.args[0] not in [i.name for i in player.inventory]:
+            print("\nThere is no {} to equip".format(self.args[0]))
+        else:
+            item = Items.get_item(self.args[0])
+            if item == player.equipped_weapon:
+                print("\n{} is already equipped.".format(item.name))
+            elif item not in Weapons.weapon_objects:
+                print("\nYou can't equip {}".format(item.name))
+            else:
+                player.equip_weapon(item)
+
     # This function is ugly and has way too many conditionals. seperate func??
+    # This function blows
     def pickup(self):
         item_name = self.args[0]
         player = Players.get_player('player')
@@ -243,7 +325,7 @@ class Actions:
             print("\nSorry, there is no {} here".format(item_name))
         else:
             item = self.eval_item()
-            if item_name == 'bandage':
+            if item_name == 'bandage':  # NEED To rework this.
                 print("\nYou picked up bandage!")
                 item.uses += 1
             elif item_name in [i.name for i in player.inventory]:
@@ -252,8 +334,8 @@ class Actions:
             elif item.pickup == 'False':
                 print("\n{} cannot be picked up".format(item_name))
             else:
-                player.add_item(item)
                 print("\nYou picked up {}!".format(item_name))
+                player.add_item(item)
 
     def eval_item(self):
         if self.args[0] in [i.name for i in Items.item_objects]:
@@ -267,12 +349,7 @@ class Actions:
             else:
                 return Items(self.args[0], attributes)
 
-    def fight(self):
-        player = Players.get_player('player')
-        current_room = Room.get_room()
-        enemy = Players.get_player(current_room.room_enemies[0])
     # This function is ugly and needs to be handled better.
-
     def examine(self):
         item_name = self.args[0]
         player = Players.get_player('player')
@@ -301,6 +378,24 @@ class Actions:
             item.use_item()
         else:
             print("\nThere is no {} to use".format(item_name))
+
+    # Look into just inheriting the player, enemy objects from combat method
+    def fight(self):
+        player = Players.get_player('player')
+        current_room = Room.get_room()
+        enemy = Players.get_player(current_room.room_enemies[0])
+        weapon = player.equipped_weapon
+        accuracy_roll = weapon.acc + randint(1, 100)
+        if accuracy_roll > 100:
+            if accuracy_roll > 85 + weapon.acc:
+                print("\nCritical hit!!! You hit {} for {} damage"
+                      .format(enemy.name, int(weapon.dmg * 1.5)))
+                enemy.health -= int(weapon.dmg * 1.5)
+            else:
+                damage_roll = weapon.dmg + randint(-5, 5)
+                print("\nYou hit {} for {} damage".format(
+                    enemy.name, damage_roll))
+                enemy.health -= damage_roll
 
 
 class Items:
@@ -344,7 +439,7 @@ class Items:
             self.decrement_uses()
             print("\nYou healed yourself.")
 
-        # This is a very specific in vague function.
+    # This is a very specific in use and vague in function.
     def light(self):
         current_room = Room.get_room()
         if current_room.lock_description[0] == 'True':
@@ -367,10 +462,13 @@ class Items:
 class Weapons(Items):
     """Creates weapons class, inherits from Items"""
 
+    weapon_objects = []
+
     def __init__(self, item_name="", attributes=[]):
         super().__init__(item_name, attributes)
-        self.dmg = attributes[3]
-        self.acc = attributes[4]
+        self.dmg = int(attributes[3])
+        self.acc = int(attributes[4])
+        self.weapon_objects.append(self)
 
 
 def main():
@@ -379,24 +477,30 @@ def main():
     player = Players('player')
     player.initialize_inventory('player')
     game_room.enter_room()
-    # actual game loop
-    action_list = ["goto", "help", "inventory", "examine", "pickup", "use"]
+    action_list = ["goto", "help", "inventory", "examine", "pickup", "use",
+                   "equip"]
     while True:
         opt = get_input(">  ", game_room, action_list)
         action = Actions(opt[0], opt[1:])
         action.run_action()
 
 
-def get_input(prompt, current_room, action_list):
-    action_list += current_room.room_actions
+def get_input(prompt, current_room, option_list):
+    try:
+        action_list = option_list + current_room.room_actions
+    except AttributeError:
+        action_list = option_list
     while True:
         choice = input(prompt).split()
-        if choice[0].lower() in action_list:
-            choice = [s.lower() for s in choice]
-            return choice
-        elif choice[0].lower() == 'quit':
-            quit()
-        else:
+        try:
+            if choice[0].lower() in action_list:
+                choice = [s.lower() for s in choice]
+                return choice
+            elif choice[0].lower() == 'quit':
+                quit()
+            else:
+                print("\nSorry, I didn't understand. Type 'help' for help")
+        except IndexError:
             print("\nSorry, I didn't understand. Type 'help' for help")
 
 
