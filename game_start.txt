@@ -1,8 +1,13 @@
+*rooms
+GAME:           ROOMS:
+survival_game|  start|  left|   right|  tunnel| waterfall|  boss_room
+*end_rooms
+
 *room_descriptions
 ROOM:         DESCRIPTIONS:
-start|        first description|    SECOND DESCRIPTION
+start|        This is the starting room, right is a wolf encounter, left is a room with some items in it.|    Starting room second description
 left|         left room first description| left room second description
-right|        Big ass cliff, you fell and die horrible
+right|        test wolf encounter
 tunnel|       It's too dark, you can't see. Maybe if you had a torch.|  Your torch illuminates a fearsome wolf gnawing on a freshly killed corpse.
 waterfall|     Behind the waterfall theres a door! You notice an old looking keypad. It has four digit slots that are blank.
 boss_room|     The door swings open revealing the BOSS FIGHT!
@@ -30,10 +35,10 @@ boss_room|  0
 
 *room_items
 ROOM:   ITEM:
-start|  bandage| knife| fists
+start|  bandage| knife
 left|   corpse| torch
 right|  None
-tunnel| body| bullet
+tunnel| bullet
 waterfall| None
 boss_room| None
 *end_room_items
@@ -69,16 +74,17 @@ boss_room|  False|  None
 *end_room_lock_description
 
 *room_enemies
-ROOM:   ENEMIES:
+ROOM:   ENEMIES & HEALTH:
 start|  None
 left|   None
-right|  wolf
-tunnel| wolf
-boss_room|  bear
+right|  wolf| 100
+tunnel| wolf| 100
+boss_room|  bear| 150
 waterfall|  None
 
 *player_inventory
 PLAYER:     ITEM:
+None|       None
 player|     fists|  bandage
 wolf|       claws
 bear|       big_claws
@@ -100,5 +106,5 @@ fists|      1|    None|       False|  15|     70|    They're your own fists, wha
 knife|      1|     None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 claws|      1|    None|       False|   20|     60|     Big ass wolf claws
-big_claws   1|    None|       False|  35|     65|     You thought the wolf claws were big??
+big_claws|   1|    None|       False|  35|     65|     You thought the wolf claws were big??
 *end_weapons
