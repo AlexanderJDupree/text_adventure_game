@@ -121,12 +121,16 @@ class Players:
         self.inventory.remove(item)
 
     # New function to equip weapons! yay!
-    def equip_weapon(self, item):
-        opt = get_input("\nequip {}? (y or n):  ".format(
-            item.name), None, ['y', 'n'])
+        def equip_weapon(self, item):
+        print("Equip {}? (yes or no)".format(item.name))
+        opt = input(">  ")
+        # opt = get_input("\nequip {}? (y or n):  ".format(
+        #     item.name), None, ['y', 'n'])
         if opt[0] == 'y':
             self.equipped_weapon = item
             print("You equipped {}!\n".format(item.name))
+        else:
+            print("{} remains unequipped.".format(item.name))
 
     def combat(self, enemy):
         action_list = ['fight', 'use', 'run', 'cry']
@@ -321,8 +325,17 @@ class Actions:
         self.args = [arg for a in args for arg in a]
 
     def run_action(self):
-        eval('self.' + self.verb + '()')
+        try:
+            eval('self.' + self.verb + '()')
+        except AttributeError:
+            print("Huh? (Invalid input. Type \"help\" for help)")
 
+    def help(self):
+        # current_room = Room.get_room()
+        # special_actions = current_room.room_actions()
+        print("\nHere is a list of commands:\n====================")
+        print("goto, examine, use, pickup")
+        print("====================")
     def goto(self):
         player = Players.get_player('player')
         current_room = player.current_room
@@ -446,6 +459,7 @@ class Items:
 
     def examine_item(self):
         print('\n' + self.description)
+         
 
     def use_item(self):
         if self.uses > 0 and self.func != 'None':
@@ -510,18 +524,16 @@ def main():
     game_room = Room.get_room('start')
     game_room.enter_room()
 
-    action_list = ["goto", "help", "inventory", "examine", "pickup", "use",
-                   "equip"]
     while True:
-        opt = get_input(">  ", game_room, action_list)
-        action = Actions(opt[0], opt[1:])
-        action.run_action()
-        game_room = player.current_room
+        # opt = get_input(">  ", game_room, action_list)
+        opt = (input(">  ")).lower().split()
+        player_input = Actions(opt[0], opt[1:])
+        player_input.run_action()
 
 
 def get_input(prompt, current_room, option_list):
     try:
-        action_list = option_list + current_room.actions
+        action_list = option_list + current_room.room_actions
     except AttributeError:
         action_list = option_list
     while True:
