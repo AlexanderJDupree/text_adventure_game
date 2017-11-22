@@ -120,13 +120,14 @@ class Players:
     def remove_item(self, item):
         self.inventory.remove(item)
 
-    # New function to equip weapons! yay!
     def equip_weapon(self, item):
-        opt = get_input("\nequip {}? (y or n):  ".format(
-            item.name), None, ['y', 'n'])
+        print("\nEquip {}? (yes or no)".format(item.name))
+        opt = input(">  ")
         if opt[0] == 'y':
             self.equipped_weapon = item
             print("You equipped {}!\n".format(item.name))
+        else:
+            print("\n{} remains unequipped.".format(item.name))
 
     def combat(self, enemy):
         action_list = ['fight', 'use', 'run', 'cry']
@@ -321,7 +322,25 @@ class Actions:
         self.args = [arg for a in args for arg in a]
 
     def run_action(self):
-        eval('self.' + self.verb + '()')
+        try:
+            eval('self.' + self.verb + '()')
+        except AttributeError:
+            print("\nHuh? (Invalid input. Type \"help\" for help)")
+
+    def help(self):
+        player = Players.get_player('player')
+        special_actions = player.current_room.actions[0]
+        print(textwrap.dedent(
+            """
+            Here is a list of commands:
+            ====================
+
+            goto, examine, use, pickup
+
+            ====================
+
+            Special commands for this room: {}
+            """.format(special_actions)))
 
     def goto(self):
         player = Players.get_player('player')
@@ -333,12 +352,17 @@ class Actions:
 
     # This functions is very specific and basically useless.
     def drink(self):  # Special action for room 'left'
-        if self.args[0] == 'water':
-            print("\nYou drink the water, and immediately feel nauseous."
-                  "\nYou pass out and die.")
-            death("GAME OVER")
+        player = Players.get_player('player')
+        if player.current_room.actions[0] == 'drink':
+            if self.args[0] == 'water':
+                print("\nYou drink the water, and immediately feel nauseous.")
+                time.sleep(2)
+                print("\nYou pass out and die.")
+                death("GAME OVER")
+            else:
+                print("\nI don't understand drink '{}'".format(self.args[0]))
         else:
-            print("\nI don't understand drink '{}'".format(self.args[0]))
+            print("\nYou can't do that here.")
 
     def inventory(self):
         player = Players.get_player('player')
@@ -505,18 +529,19 @@ class Weapons(Items):
 
 
 def main():
+    # Initializes game world
     create_game_world('game_start.txt')
     player = Players('player')
-    game_room = Room.get_room('start')
-    game_room.enter_room()
-
-    action_list = ["goto", "help", "inventory", "examine", "pickup", "use",
-                   "equip"]
+    player.current_room = Room.get_room('start')
+    player.current_room.enter_room()
+    # Game loop
     while True:
-        opt = get_input(">  ", game_room, action_list)
-        action = Actions(opt[0], opt[1:])
-        action.run_action()
-        game_room = player.current_room
+        opt = (input(">  ")).lower().split()
+        try:  # Exception for index error if player presses enter without typing anything
+            player_input = Actions(opt[0], opt[1:])
+            player_input.run_action()
+        except IndexError:
+            print("\nHuh? (Invalid input. Type \"help\" for help)")
 
 
 def get_input(prompt, current_room, option_list):
