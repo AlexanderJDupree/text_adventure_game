@@ -129,7 +129,7 @@ class Players:
         else:
             print("\n{} remains unequipped.".format(item.name))
 
-    def combat(self, enemy):
+    def combat(self, enemy):  # Can still use ACTION commands outside of combat.
         action_list = ['fight', 'use', 'run', 'cry']
 
         print("\nYou entered combat with {}.".format(enemy.name))
@@ -137,12 +137,13 @@ class Players:
 
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
-            for action in action_list:
+            for action in action_list:  # Prints all actions. Purpose is to add "(item)" without adding it to list.
                 if action == 'use':
                     print('\t' + action.capitalize(), '(item)')
                 else:
                     print('\t' + action.capitalize())
-            opt = get_input("\n>  ", self.current_room, action_list)
+            #opt = get_input("\n>  ", self.current_room, action_list)  #See if we can get rid of get_input
+            opt = input(">  ").lower().split()
             if opt[0] == 'run':
                 if self.run_away() == True:
                     self.current_room.next_room(self.current_room.branches[0])
@@ -175,7 +176,7 @@ class Players:
             time.sleep(1)
             print("You have {}/100 health remaining".format(self.health))
             return False
-            # run a enemy damage function
+            # Run a enemy damage function
 
     @classmethod
     def get_player(cls, name):
@@ -434,22 +435,23 @@ class Actions:
             print("\nThere is no {} to use".format(item_name))
 
     # Look into just inheriting the player, enemy objects from combat method
+    # BUG: Type fight when outside of a fight.
     def fight(self):
         # Grab needed objects
         player = Players.get_player('player')
         enemy = player.current_room.enemies
         weapon = player.equipped_weapon
         # Execute combat actions
-        accuracy_roll = weapon.acc + randint(1, 100)
+        accuracy_roll = weapon.acc + randint(1, 100)  # Takes weapon accuracy from .txt file and adds a number 1-100 to it.
         print("You attack!. . . .")
         time.sleep(1.5)
-        if accuracy_roll > 100:
-            if accuracy_roll > 85 + weapon.acc:
+        if accuracy_roll > 100:  # Accuracy role must be over 100 to do anything.
+            if accuracy_roll > 85 + weapon.acc:  # If the random number was 86-100, critical hit,
                 print("\nCritical hit!!! You hit {} for {} damage"
                       .format(enemy.name, int(weapon.dmg * 1.5)))
                 enemy.health -= int(weapon.dmg * 1.5)
             else:
-                damage_roll = weapon.dmg + randint(-5, 5)
+                damage_roll = weapon.dmg + randint(-5, 5)  # Else, damage normal, give or take 5 from base weapon.
                 print("\nYou hit {} for {} damage".format(
                     enemy.name, damage_roll))
                 enemy.health -= damage_roll

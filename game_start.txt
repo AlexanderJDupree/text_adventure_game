@@ -5,7 +5,7 @@ survival_game|  start|  left|   right|  tunnel| waterfall|  boss_room
 
 *room_descriptions
 ROOM:         DESCRIPTIONS:
-start|        This is the starting room, right is a wolf encounter, left is a room with some items in it.|    SSart room second dcription
+start|        You awake to see yourself looking at the light from a hole in the ceiling. You look around. It seems you've fallen into a cave. There are two paths, to your LEFT you hear the soft sound of running water. To your RIGHT, you hear a snarl in the dark. Which way do you go?|    SSart room second dcription
 left|         left room first description| left room second description
 right|        test wolf encounter
 tunnel|       It's too dark, you can't see. Maybe if you had a torch.|  Your torch illuminates a fearsome wolf gnawing on a freshly killed corpse.
