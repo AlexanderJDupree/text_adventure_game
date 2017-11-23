@@ -83,6 +83,8 @@
     *condense object grabbing in the action methods into a seperate method for ease of use.
 
     *Look into creating convenience methods for lines of code I reuse alot.
+
+    * This is Jake testing how to merge lol
 """
 import csv
 import textwrap
