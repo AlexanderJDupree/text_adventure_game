@@ -5,69 +5,23 @@
 # compiler: Python 3.6
 
 """
-    * Game now instantiates ALL object for use and put them into the correct
-        containers. I.e. Start room holds knife and bandage object. Right room
-        hold wolf enemy object and no item objects etc. etc.
+    11/23/2017
 
-    * Because of this change I reworked most of the methods in the Action class,
-    and the Room class to grab objects that already exist from their
-    corresponding container. previously I would have to overwrite the rooom
-    from the attribtues in the textGame.txt file. As well as create the items and
-    enemy objects when the user interacted with them.
+    *Re-implemented original get_input function into combat and main game loop. The get_input receives a action list when called and only executes action if user
+    input is in the action list. The action list is also updated with the current
+    room special actions. This prevents the user from entering 'run_action' and
+    blowing the stack. As well as stops the user from calling the fight function
+    anywhere in the game map. Separating our input into a different function really
+    simplifies and prevents errors later in the code.
 
-    * This change also negates the need for a seperate game.txt for file for
-    parsing and grabbing attributes. So I got rid of the textGame.txt.
+    * Enemies now drop loot at the end of combat. Loot is auto-picked up by the
+    player
 
-    * All attributes are pulled from the game_start.txt file now.
+    * On failed run away attempts the enemy will now take a free turn. instead of
+    a flat -10 damage to player.
 
-    *reworked Room class __init__ method again. on game start it will also
-    instantiate any item and enemy objects it needs.
-
-    * Combat loop is 99% done! Fight, use, run are all functional. I haven't
-    implemented 'cry' yet. I was thinking that would affect players dignity
-    attribute and print a funny message.
-
-    * Combat uses time.sleep(n) to slow down the data and make it feel more engaging
-
-    *Failed attempts at running away will now damage player
-
-    * When combat is finished the enemy object is deleted from the game world.
-
-    *I want to implement a small chance that on enemy turn the enemy will pass,
-    or run away.
-
-    *Maybe implement a defend or block option in the combat loop as well.
-
-    * Fight has critical hit functionality as well
-
-    * When player picks up a weapon, game will now ask the user if he wants to
-    equip that weapon.
-
-    *added equip() method in action class. Player can now equip whatever weapon
-    they have in their inventory by typing 'equip (item)'
-
-    *Add equip into combat action list?? So player can change weapons whenever.
-
-    *Reworked the add_item() and pickup() methods. Now if you pickup an item
-    you already have the game won't instantiate another item and add it to
-    your inventory. Instead, it will increment the number of uses for your
-    item.
-
-    *Reworked the read_inventory() method in the Player class. Now it will
-    print how many of each item is in the inventory. Like Bandages x 3.
-
-    * Reworked the input function so it could be used for combat input as well
-
-    *Fixed a bug in the input function, if player pressed enter without
-    inputing any characters the game would crash.
-
-    *Fixed a bug in the input function action list update. The action list
-    would retain all the special room actions and combat actions even when
-    combat was terminated.
-
-    * Reworked room description printing to have use textwrapping
-
-    * Need to create help function
+    * Changed the while loops from while True to while player.health > 0:
+    this allows the keypad function to terminate if the player dies.
 
     * Need to make death method functional and dynamic
 
@@ -77,10 +31,7 @@
 
     * Look into saving game state
 
-    * I use 'if item in [i.name for i in player.inventory]:' maybe make this a
-    seperate function call check_inventory(self): Returns True or False
-
-    *condense object grabbing in the action methods into a seperate method for ease of use.
+    *condense object grabbing in the action methods into a separate method for ease of use.
 
     *Look into creating convenience methods for lines of code I reuse alot.
 """
@@ -113,9 +64,13 @@ class Players:
         print("====================\n")
 
     def add_item(self, item):
-        self.inventory.append(item)
-        if item in Weapons.weapon_objects:
-            self.equip_weapon(item)
+        if item.name in [i.name for i in self.inventory]:
+            player_item = [i for i in self.inventory if item.name == i.name]
+            player_item[0].uses += 1
+        else:
+            self.inventory.append(item)
+            if item in Weapons.weapon_objects:
+                self.equip_weapon(item)
 
     def remove_item(self, item):
         self.inventory.remove(item)
@@ -123,13 +78,14 @@ class Players:
     def equip_weapon(self, item):
         print("\nEquip {}? (yes or no)".format(item.name))
         opt = input(">  ")
-        if opt[0] == 'y':
+        if opt[0].lower() in ('y', 'yes'):
             self.equipped_weapon = item
             print("You equipped {}!\n".format(item.name))
         else:
             print("\n{} remains unequipped.".format(item.name))
 
-    def combat(self, enemy):  # Can still use ACTION commands outside of combat.
+    # Can still use ACTION commands outside of combat. FIXED 11/23/2017
+    def combat(self, enemy):
         action_list = ['fight', 'use', 'run', 'cry']
 
         print("\nYou entered combat with {}.".format(enemy.name))
@@ -137,15 +93,14 @@ class Players:
 
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
-            for action in action_list:  # Prints all actions. Purpose is to add "(item)" without adding it to list.
+            for action in action_list:
                 if action == 'use':
                     print('\t' + action.capitalize(), '(item)')
                 else:
                     print('\t' + action.capitalize())
-            #opt = get_input("\n>  ", self.current_room, action_list)  #See if we can get rid of get_input
-            opt = input(">  ").lower().split()
+            opt = get_input("\n>  ", self.current_room, action_list)
             if opt[0] == 'run':
-                if self.run_away() == True:
+                if self.run_away(enemy) == True:
                     self.current_room.next_room(self.current_room.branches[0])
                     break
             else:
@@ -154,6 +109,10 @@ class Players:
                 enemy.enemy_turn()
         if self.health > 0 and enemy.health <= 0:
             print("\nCongratulations! You defeated {}".format(enemy.name))
+            loot = enemy.inventory[randint(1, len(enemy.inventory) - 1)]
+            time.sleep(1)
+            print("{} dropped a {}".format(enemy.name, loot.name))
+            self.add_item(loot)
             self.current_room.enemies = None
             self.current_room.events = 'None'
             Players.player_objects.remove(enemy)
@@ -162,7 +121,7 @@ class Players:
             print("\nYou were deafeated by {}".format(enemy.name))
             death("GAME OVER")
 
-    def run_away(self):
+    def run_away(self, enemy):
         # Must roll above a 85 to run away
         print("Running away!. . . .")
         time.sleep(1)
@@ -171,12 +130,10 @@ class Players:
             time.sleep(1)
             return True
         else:
-            self.health -= 10
-            print("You failed to run away!\nYou were hurt trying to escape")
+            print("\nYou failed to run away!")
             time.sleep(1)
-            print("You have {}/100 health remaining".format(self.health))
+            enemy.enemy_turn()
             return False
-            # Run a enemy damage function
 
     @classmethod
     def get_player(cls, name):
@@ -237,7 +194,7 @@ class Enemy(Players):
 
 
 class Room:
-    """Initialies room object, attributes are pulled from text file"""
+    """Initializes room object, attributes are pulled from text file"""
 
     room_objects = []
 
@@ -291,7 +248,7 @@ class Room:
     def keypad(self):  # Need to implement death
         player = Players.get_player("player")
         code = "6824"
-        while True:
+        while player.health > 0:
             player_attempt = input(
                 "Enter code (type \"back\" to back out):\n>  ")
             if player_attempt == code:
@@ -307,6 +264,8 @@ class Room:
                 player.health -= 25
             else:
                 print("\nThe keypad lets out a quizical beep. (Invalid input)")
+        print("\nThat was stupid, death by keypad")
+        death("GAME OVER")
 
     @classmethod
     def get_room(cls, name):
@@ -334,11 +293,11 @@ class Actions:
         print(textwrap.dedent(
             """
             Here is a list of commands:
-            ====================
+            ==================================================
 
-            goto, examine, use, pickup
+            goto, examine, use, pickup, inventory, equip, quit
 
-            ====================
+            ==================================================
 
             Special commands for this room: {}
             """.format(special_actions)))
@@ -354,19 +313,14 @@ class Actions:
             else:
                 print("\n{} isn't an option".format(self.args[0]))
 
-    # This functions is very specific and basically useless.
-    def drink(self):  # Special action for room 'left'
-        player = Players.get_player('player')
-        if player.current_room.actions[0] == 'drink':
-            if self.args[0] == 'water':
-                print("\nYou drink the water, and immediately feel nauseous.")
-                time.sleep(2)
-                print("\nYou pass out and die.")
-                death("GAME OVER")
-            else:
-                print("\nI don't understand drink '{}'".format(self.args[0]))
+    def drink(self):
+        if self.args[0] == 'water':
+            print("\nYou drink the water, and immediately feel nauseous.")
+            time.sleep(2)
+            print("\nYou pass out and die.")
+            death("GAME OVER")
         else:
-            print("\nYou can't do that here.")
+            print("\nI don't understand drink '{}'".format(self.args[0]))
 
     @staticmethod
     def inventory():
@@ -386,8 +340,6 @@ class Actions:
             else:
                 player.equip_weapon(item)
 
-    # This function is ugly and has way too many conditionals. seperate func??
-    # This function blows
     def pickup(self):
         item_name = self.args[0]
         player = Players.get_player('player')
@@ -408,7 +360,6 @@ class Actions:
                 player.add_item(room_item[0])
                 current_room.items.remove(room_item[0])
 
-    # This function is ugly and needs to be handled better.
     def examine(self):
         item_name = self.args[0]
         player = Players.get_player('player')
@@ -434,15 +385,15 @@ class Actions:
         else:
             print("\nThere is no {} to use".format(item_name))
 
-    # Look into just inheriting the player, enemy objects from combat method
-    # BUG: Type fight when outside of a fight.
+    # BUG: Fixed by using original get_input method.
     def fight(self):
         # Grab needed objects
         player = Players.get_player('player')
         enemy = player.current_room.enemies
         weapon = player.equipped_weapon
         # Execute combat actions
-        accuracy_roll = weapon.acc + randint(1, 100)  # Takes weapon accuracy from .txt file and adds a number 1-100 to it.
+        # Takes weapon accuracy from .txt file and adds a number 1-100 to it.
+        accuracy_roll = weapon.acc + randint(1, 100)
         print("You attack!. . . .")
         time.sleep(1.5)
         if accuracy_roll > 100:  # Accuracy role must be over 100 to do anything.
@@ -451,7 +402,8 @@ class Actions:
                       .format(enemy.name, int(weapon.dmg * 1.5)))
                 enemy.health -= int(weapon.dmg * 1.5)
             else:
-                damage_roll = weapon.dmg + randint(-5, 5)  # Else, damage normal, give or take 5 from base weapon.
+                # Else, damage normal, give or take 5 from base weapon.
+                damage_roll = weapon.dmg + randint(-5, 5)
                 print("\nYou hit {} for {} damage".format(
                     enemy.name, damage_roll))
                 enemy.health -= damage_roll
@@ -548,14 +500,13 @@ def main():
     player = Players('player')
     player.current_room = Room.get_room('start')
     player.current_room.enter_room()
+    action_list = ['goto', 'pickup', 'examine',
+                   'use', 'help', 'inventory', 'equip', 'quit']
     # Game loop
-    while True:
-        opt = (input(">  ")).lower().split()
-        try:  # Exception for index error if player presses enter without typing anything
-            player_input = Actions(opt[0], opt[1:])
-            player_input.run_action()
-        except IndexError:
-            print("\nHuh? (Invalid input. Type \"help\" for help)")
+    while player.health > 0:
+        opt = get_input(">  ", player.current_room, action_list)
+        player_input = Actions(opt[0], opt[1:])
+        player_input.run_action()
 
 
 def get_input(prompt, current_room, option_list):
@@ -569,8 +520,6 @@ def get_input(prompt, current_room, option_list):
             if choice[0].lower() in action_list:
                 choice = [s.lower() for s in choice]
                 return choice
-            elif choice[0].lower() == 'quit':
-                quit()
             else:
                 print("\nSorry, I didn't understand. Type 'help' for help")
         except IndexError:

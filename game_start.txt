@@ -86,7 +86,7 @@ waterfall|  None
 PLAYER:     ITEM:
 None|       None
 player|     fists|  bandage
-wolf|       claws
+wolf|       claws|  knife| bandage| note
 bear|       big_claws
 *end_player_inventory
 
@@ -94,7 +94,7 @@ bear|       big_claws
 ITEM:       USES:   FUNCTION:       PICKUP: DESCRIPTION:
 bandage|    1|      heal()|         True|   regular bandage, for use on wounds.
 matches|    1|      None|           True|   Just standard wooden matches
-note|       0|      None|           True|   The note reads:  Door code: 6824
+note|       1|      None|           True|   The note reads:  Door code: 6824
 corpse|     0|      None|           False|  The corpse is old and stinky
 torch|      1|      light()|        True|   A torch that, miracously, can be lit. Just like the movies.
 bullet|     1|      load_gun()|     True|   The bullet is a .44 Magnum, it'll stop anything in it's tracks.
@@ -103,7 +103,7 @@ bullet|     1|      load_gun()|     True|   The bullet is a .44 Magnum, it'll st
 *weapons
 WEAPONS:    USES:   FUNCTION:   PICKUP: DMG:    ACC:     DESCRIPTION:
 fists|      1|    None|       False|  15|     70|    They're your own fists, what's there to examine??
-knife|      1|     None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
+knife|      1|     None|       True|   50|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 claws|      1|    None|       False|   20|     60|     Big ass wolf claws
 big_claws|   1|    None|       False|  35|     65|     You thought the wolf claws were big??
