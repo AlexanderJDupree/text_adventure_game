@@ -109,9 +109,14 @@ waterfall|  None
 *player_inventory
 PLAYER:     ITEM:
 None|       None
+<<<<<<< HEAD
 player|     fists|  bandage|   code
 rat|        small_claws
 wolf|       claws
+=======
+player|     fists|  bandage
+wolf|       claws|  knife| bandage| note
+>>>>>>> 674c0f28590fed4fcb4509aa761b0182b7a3f6c2
 bear|       big_claws
 *end_player_inventory
 
