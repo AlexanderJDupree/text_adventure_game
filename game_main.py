@@ -511,7 +511,7 @@ class Items:
         if player.health == 100:
             print("\nYou're not injured.")
         else:
-            player.health += 25
+            player.health += 40
             if player.health > 100:
                 player.health = 100
             self.decrement_uses()
@@ -529,6 +529,9 @@ class Items:
             current_room.enter_room()
         else:
             print("\nYou can't use that here")
+
+    # def beartrap(self):
+    #     player = Players.get_player("player")
 
     @classmethod
     def get_item(cls, name):
@@ -553,7 +556,7 @@ def main():
     # Initializes game world
     create_game_world('game_start.txt')
     player = Players('player')
-    player.current_room = Room.get_room('start')
+    player.current_room = Room.get_room('hole')
     player.current_room.enter_room()
     # Game loop
     while True:
