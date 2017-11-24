@@ -109,20 +109,14 @@ waterfall|  None
 *player_inventory
 PLAYER:     ITEM:
 None|       None
-<<<<<<< HEAD
-player|     fists|  bandage|   code
+player|     fists|  bandage
 rat|        small_claws
 wolf|       claws
-=======
-player|     fists|  bandage
-wolf|       claws|  knife| bandage| note
->>>>>>> 674c0f28590fed4fcb4509aa761b0182b7a3f6c2
 bear|       big_claws
 *end_player_inventory
 
 *items
 ITEM:       USES:   FUNCTION:       PICKUP: DESCRIPTION:
-<<<<<<< HEAD
 bandage|    2|      heal()|         True|   A regular bandage. Heals 40 health.
 code|       1|      None|           True|   The note reads:  Door code: 6824
 corpse|     0|      None|           False|  This corpse is smelly and looks as if it has been mauled. In the left hand, a CODE. In the right, a GUN.
@@ -130,25 +124,12 @@ cellphone|  1|      None|           True|   A flip phone that miraculously has s
 beartrap|   1|      None|           True|   A loaded bear trap, good for one use with deadly results.
 torch|      1|      light()|        True|   A torch that, miraculously, can be lit. Just like the movies.
 bullet|     2|      load_gun()|     True|   The bullet is a .44 Magnum, it'll stop anything in it's tracks.
-=======
-bandage|    1|      heal()|         True|   regular bandage, for use on wounds.
-matches|    1|      None|           True|   Just standard wooden matches
-note|       1|      None|           True|   The note reads:  Door code: 6824
-corpse|     0|      None|           False|  The corpse is old and stinky
-torch|      1|      light()|        True|   A torch that, miracously, can be lit. Just like the movies.
-bullet|     1|      load_gun()|     True|   The bullet is a .44 Magnum, it'll stop anything in it's tracks.
->>>>>>> 674c0f28590fed4fcb4509aa761b0182b7a3f6c2
 *end_items
 
 *weapons
 WEAPONS:    USES:   FUNCTION:   PICKUP: DMG:    ACC:     DESCRIPTION:
-<<<<<<< HEAD
 fists|      1|      None|       False|  15|     70|    They're your own fists, what's there to examine??
 knife|      1|      None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
-=======
-fists|      1|    None|       False|  15|     70|    They're your own fists, what's there to examine??
-knife|      1|     None|       True|   50|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
->>>>>>> 674c0f28590fed4fcb4509aa761b0182b7a3f6c2
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 small_claws| 1|     None|       False|    10|    60|    Small, skittish claws.
 claws|      1|      None|       False|   20|     60|     Big, strong wolf claws.
