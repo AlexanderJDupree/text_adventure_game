@@ -318,6 +318,13 @@ class Room:
 class Actions:
     """creates object with users string to run a function"""
 
+    """There is an issue here. Players can type run_action and it overflows the stack.
+    Players can type "fight" and run the fight program even outside of a fight.
+    Either these functions must exist outside of Action.class, or we could use a dictionary of
+    allowed words at any given time, which can delete and add keywords when needed.
+    I think that was what you had going with the get_input function. We can use that, or clean it up
+    and use that dictionary I had created awhile ago."""
+
     def __init__(self, verb="", *args):
         self.verb = verb
         self.args = [arg for a in args for arg in a]
