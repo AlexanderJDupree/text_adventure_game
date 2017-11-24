@@ -1,19 +1,20 @@
 *rooms
 GAME:           ROOMS:
-survival_game|  hole|  left|   rat|  tunnel| extension | waterfall|  lab|   secret|   cage
+survival_game|  hole|  left|   rat|  tunnel| extension | waterfall|  lab| secret|   cage| statue
 *end_rooms
 
 *room_descriptions
 ROOM:         DESCRIPTIONS:
-hole|         You awake to see yourself looking at the light from a HOLE in the ceiling. You look around. It seems you've fallen into a cave. There are two paths, to your LEFT you hear the soft sound of running water. To your right, you hear the squeaks of what seem to be a RAT. Which way do you go? Type "help" for help.|    You remember this room like you remember the bruise on the back of your head. To your LEFT you hear the soft sound of running water. To your right, you hear the squeaks of what seem to be a RAT.
-left|         Somehow, your legs are functional and manage to carry you from room to room. This is fortunate, because a torch on the wall reveals another fork in the path, with more rooms. You may follow the sounds of the water to the WATERFALL, walk into the dark, scary TUNNEL, head back to the HOLE you fell into, or perhaps stay and examine the place!| This place is small and claustrophobic, you think to yourself. You can go to the WATERFALL, the dark TUNNEL, or the HOLE where you began.
-rat|          You walk towards the sound of a rat. You're shocked. It's a rat.
-tunnel|       It's too dark. You let your eyes adjust. It's still too dark. However, you do hear the snarl of an angry canine. You can't go on further, you must head back LEFT.|  Your torch illuminates a fearsome wolf gnawing on fresh meat. After the fight, you may head back LEFT or continue onto the EXTENSION.
-extension|    The end of the road. Your torch illuminates a corpse lying against a wall, and a beartrap sits patiently next to you. Looks like there's nothing you can do but head back into the TUNNEL.
-secret|       Clicks and clacks of mechanisms hidden within the walls begin, and the door slowly opens up revealing a dimly lit, but otherwise well decorated room. The walls are made up metal, and this place seemingly looks like a lobby of some sort. Furniture is knocked over, papers everywhere, the room is a mess, but you can tell this once held a safe work environment for...someone. You try the doors, and they're all locked except for two. A room with a CAGE startles you as a wolf attempts to jump at you in rage. However, you do spot a couple .50 caliber bullets lying within the cage. The only other available room is one labeled LAB. If you'd like, you can head back to the WATERFALL. | This lobby-esqe room is irksome. You wonder what happened here. You can head into the LAB, "greet" the wolf in the CAGE, or head back into the WATERFALL.
-cage|         A fearsome wolf is ready to unleash its rage!
+hole|         You awake to see yourself looking at the light from a HOLE in the ceiling. You look around. It seems you've fallen into a cave. There is a Bandage on the ground, which may be useful. There are two paths, to your LEFT you hear the soft sound of running water. To your right, you hear the squeaks of what seem to be a RAT. Which way do you go? Type "help" for help.|    You remember this room like you remember the bruise on the back of your head. To your LEFT you hear the soft sound of running water. To your right, is the room with the RAT.
+left|         Somehow, your legs are functional and manage to carry you from room to room. This is fortunate, because a Torch on the wall reveals another fork in the path, with more rooms. You may follow water to the WATERFALL, walk into the dark, scary TUNNEL, head back to the HOLE you fell into, or perhaps stay and Examine the place!| This place is small and claustrophobic, you think to yourself. You can go to the WATERFALL, the dark TUNNEL, or the HOLE where you began.| Looking closer at your surroundings you see a Body next to the water. You may want to examine the Body, or maybe get a Drink of the water. You are thirsty after all. Also, picking up that Torch may be a good idea. You can go to WATERFALL or the  TUNNEL
+rat|          You walk towards the sound of a rat. You're shocked. It's a rat.| With the rat dead there's nothing left to examine in this room. You can goto HOLE, where you started.
+tunnel|       It's too dark. You let your eyes adjust. It's still too dark, maybe if you had a Torch. However, you do hear the snarl of an angry canine. You can't go on further, you must head back LEFT.|  Your torch illuminates a fearsome wolf gnawing on fresh meat.| With the wolf dead, you may head back LEFT or continue onto the EXTENSION.
+extension|    The end of the road. Your torch illuminates a Corpse lying against a wall, and a unused Beartrap sits patiently next to you. Looks like there's nothing you can do but head back into the TUNNEL.| End of the road, the corpse is still here but maybe you should head back to TUNNEL.
+secret|       Clicks and clacks of mechanisms hidden within the walls begin, and the door slowly opens up revealing a dimly lit, but otherwise well decorated room. The walls are made of metal, and this place seemingly looks like a lobby of some sort. Furniture is knocked over, papers everywhere, the room is a mess, but you can tell this once held a safe work environment for...someone. You try the doors, and they're all locked except for two. A room with a CAGE startles you as a wolf attempts to jump at you in rage. However, you do spot a couple .45 magnum rounds lying within the cage. The only other available room is one labeled LAB. If you'd like, you can head back to the WATERFALL. | This lobby-esqe room is irksome. You wonder what happened here. You can head into the LAB, "greet" the wolf in the CAGE, or head back into the WATERFALL.
+cage|         A fearsome wolf is ready to unleash its rage!| With the wolf dead, it looks like you can pick up those bullets and head back to the SECRET room.
 waterfall|    You follow the sounds to a waterfall. The water looks odd, and illuminates the cave. What's that at the base of it? You walk through the water to reveal a securely locked door with a keypad! It has four digit slots, waiting for input. What could possibly be on the other side? | The waterfall is pretty, but its slight glow is off-putting. You step up to the keypad.
-lab|          You slide the lab door open, revealing a large, starving bear helping itself to a poor sucker in a lab coat. Uh oh, this is not going to end well!
+lab|          You slide the lab door open, revealing a large, starving bear helping itself to a poor sucker in a lab coat. Uh oh, this is not going to end well!| With the bear defeated you notice a priceless aztec STATUE sitting firmly upon an altar at the rear of the room. You can goto the STATUE, or it might be a good idea to just use that cellphone and get the hell out of here.
+statue|      You approach the priceless Aztec statue. It is the most glorious object you have ever laid eyes on. It's worth could bring you countless fortune and would make this hell-ish adventure worth it's literal weight in gold.
 *end_room_descriptions
 
 *room_branches
@@ -26,33 +27,36 @@ extension|  tunnel
 waterfall|  left|  secret
 secret|     waterfall|  lab  | cage
 cage|       secret
-lab|        secret
+lab|        secret| statue
+statue|     lab
 *end_room_branches
 
 *room_count
-ROOMS:  COUNT:
-hole|  0
-left|   0
-rat|  0
-tunnel| 0
+ROOMS:      COUNT:
+hole|       0
+left|       0
+rat|        0
+tunnel|     0
 waterfall|  0
 extension|  0
-secret|  0
-cage|  0
-lab|  0
+secret|     0
+cage|       0
+lab|        0
+statue|     0
 *end_room_count
 
 *room_items
 ROOM:   ITEM:
-hole|  bandage
-left|   corpse| torch
-rat|  bandage|  knife
+hole|  None
+left|   body| torch
+rat|  bandage
 tunnel| None
 waterfall| None
-extension|  code|  gun|  beartrap
+extension|  code|  gun|  corpse| beartrap
 secret| None
 cage|  bullet|  bandage
-lab| cellphone
+lab| None
+statue| None
 *end_room_items
 
 *room_events
@@ -66,6 +70,7 @@ waterfall| self.keypad()
 secret|  None
 cage|   self.encounter()
 lab|  self.encounter()
+statue| self.aztec_statue()
 *end_room_events
 
 *room_actions
@@ -79,40 +84,43 @@ waterfall|  None
 secret|   None
 cage|  None
 lab|  None
+statue| None
 *end_room_actions
 
 *room_lock_description
-ROOM:   LOCK:   DESCRIPTION_INDEX:
-hole|  False|  None
-left|   False|  None
-rat|  False|  None
-tunnel| True|   0
+ROOM:       LOCK:       DESCRIPTION_INDEX:
+hole|       False|  None
+left|       False|  None
+rat|        False|  None
+tunnel|     True|   0
 extension|  False|  None
-waterfall| False|   None
-secret|  False|  None
-cage|  False|  None
-lab|  False|  None
+waterfall|  False|  None
+secret|     False|  None
+cage|       False|  None
+lab|        False|  None
+statue|     False|  None
 *end_room_lock_description
 
 *room_enemies
 ROOM:   ENEMIES & HEALTH:
-hole|  None
-left|   None
-rat|  rat| 50
-tunnel| wolf| 70
+hole|       None
+left|       None
+rat|        rat|    50
+tunnel|     wolf|   70
 extension|  None
-lab|  bear| 200
-secret|   None
-cage| wolf| 70
+lab|        bear|   200
+secret|     None
+cage|       wolf|   70
 waterfall|  None
+statue|     None
 
 *player_inventory
 PLAYER:     ITEM:
 None|       None
 player|     fists|  bandage
-rat|        small_claws
-wolf|       claws
-bear|       big_claws
+rat|        small_claws| knife
+wolf|       claws| spear| bandage
+bear|       big_claws| cellphone
 *end_player_inventory
 
 *items
@@ -120,8 +128,9 @@ ITEM:       USES:   FUNCTION:       PICKUP: DESCRIPTION:
 bandage|    2|      heal()|         True|   A regular bandage. Heals 40 health.
 code|       1|      None|           True|   The note reads:  Door code: 6824
 corpse|     0|      None|           False|  This corpse is smelly and looks as if it has been mauled. In the left hand, a CODE. In the right, a GUN.
-cellphone|  1|      None|           True|   A flip phone that miraculously has signal! (This should trigger end of the game)
-beartrap|   1|      None|           True|   A loaded bear trap, good for one use with deadly results.
+body|       0|      None|           False|  The body is old, and rotting. There are no signs of a struggle. The only clue to his death is the pile of vomit near the water.
+cellphone|  1|      victory()|      True|   A flip phone that miraculously has signal!
+beartrap|   1|      beartrap()|           True|   A loaded bear trap, good for one use with deadly results.
 torch|      1|      light()|        True|   A torch that, miraculously, can be lit. Just like the movies.
 bullet|     2|      load_gun()|     True|   The bullet is a .44 Magnum, it'll stop anything in it's tracks.
 *end_items
@@ -130,8 +139,14 @@ bullet|     2|      load_gun()|     True|   The bullet is a .44 Magnum, it'll st
 WEAPONS:    USES:   FUNCTION:   PICKUP: DMG:    ACC:     DESCRIPTION:
 fists|      1|      None|       False|  15|     70|    They're your own fists, what's there to examine??
 knife|      1|      None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
+spear|      1|      None|       True|   40|     70|     Crude, but effective, spear.
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 small_claws| 1|     None|       False|    10|    60|    Small, skittish claws.
 claws|      1|      None|       False|   20|     60|     Big, strong wolf claws.
 big_claws|   1|     None|       False|  35|     65|     You thought the wolf claws were big??
 *end_weapons
+
+*victory_sequence
+VICTORY:    SEQUENCE:
+cellphone|  The phone is about to die. Its battery is at 3%, you have time for only one call. You dial 911 and quickly explain to the dispatcher where to look for you. As you finish your story the phone cuts out and dies. There's nothing left to do but wait.| 3 hours later, you hear some commotion. It's the rescue team here to save you from this wretched cave!| Congratulations you survived and beat the game!!| Game credits: Alexander DuPree, Jacob Bickle. Thanks for playing!!
+*end_victory_sequence
