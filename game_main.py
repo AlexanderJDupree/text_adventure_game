@@ -5,35 +5,51 @@
 # compiler: Python 3.6
 
 """
-    11/23/2017
+    11/24/2017
 
-    *Re-implemented original get_input function into combat and main game loop. The get_input receives a action list when called and only executes action if user
-    input is in the action list. The action list is also updated with the current
-    room special actions. This prevents the user from entering 'run_action' and
-    blowing the stack. As well as stops the user from calling the fight function
-    anywhere in the game map. Separating our input into a different function really
-    simplifies and prevents errors later in the code.
+    * You can now beat the game! Using the cellphone the bear drops triggers the endgame sequence.
 
-    * Enemies now drop loot at the end of combat. Loot is auto-picked up by the
-    player
+    *Added text block of endgame sequence to game_start.txt. victory() parses and
+    prints this to screen.
 
-    * On failed run away attempts the enemy will now take a free turn. instead of
-    a flat -10 damage to player.
+    *Added new action 'status'. If player types status the game will print out
+    the players health, equipped weapon & stats. The current room, available actions
+    branches, and items for that room.
 
-    * Changed the while loops from while True to while player.health > 0:
-    this allows the keypad function to terminate if the player dies.
+    *After combat the game will now print post combat room descriptions.
+
+    *Updated the room descriptions in game_start to reflect post-combat descriptions
+    and examine room descriptions. Altered some text in the descriptions to alert
+    user to items and actions available in the room.
+
+    *According to orignal game document we needed to include a priceless aztec statue
+    in our story. I added a STATUE room that connects to the lab. upon entering the
+    player is confronted with a choice of taking the statue or leaving it. If you take
+    it springs an arrow trap and kills the player.
+
+    *Added new weapon, spear. Added it to wolf's loot table.
+
+    *rat now drops a knife.
+
+    *Beartrap is fully functional! It deals 100 damage to the enemy. and can only be
+    used in combat.
+
+    *Updated help function
+
+    *Keypad minigame can now kill the player.
 
     * Need to make death method functional and dynamic
 
-    * Need to populate game_start.txt with actual game text
-
     * Need to create a tutorial or readme.txt file for game
+
+    * Do we need a gun? It may be a little too powerful in conjuntion with the bear
+    trap. It will also require a special attribtue linked to the number of bullets in
+    players inventory.
+
+    * I like the combat changes to health and weapon damage! Combat feels very balanced!
 
     * Look into saving game state
 
-    *condense object grabbing in the action methods into a separate method for ease of use.
-
-    *Look into creating convenience methods for lines of code I reuse alot.
 """
 import csv
 import textwrap
@@ -52,7 +68,7 @@ class Players:
         self.health = health
         self.equipped_weapon = None
         self.inventory = Players.initialize_inventory(name)
-        self.equipped_weapon = Players.initial_equip(name)
+        self.equipped_weapon = self.inventory[0]
         self.dignity = dignity  # Haven't found a use for this attribute yet.
         self.current_room = None
         self.player_objects.append(self)
@@ -117,6 +133,7 @@ class Players:
             self.current_room.events = 'None'
             Players.player_objects.remove(enemy)
             del enemy
+            self.current_room.enter_room()
         if self.health <= 0:
             print("\nYou were deafeated by {}".format(enemy.name))
             death("GAME OVER")
@@ -150,14 +167,6 @@ class Players:
             inventory.append(i)
         return inventory
 
-    @classmethod
-    def initial_equip(cls, name):
-        item_list = parse_file('game_start.txt', name, '*player_inventory')
-        for i in item_list:
-            for w in Weapons.weapon_objects:
-                if i == w.name:
-                    return w
-
 
 class Enemy(Players):
     """Creates enemy object for use in story"""
@@ -166,7 +175,7 @@ class Enemy(Players):
         super().__init__(name, health)
 
     def enemy_turn(self):
-        if self.health <= 0:
+        if self.health <= 0:  # Prevents enemy from taking another turn after killed
             print("\nThe {} was killed!".format(self.name))
         else:
             player = Players.get_player('player')
@@ -227,8 +236,7 @@ class Room:
                 self.description[int(self.lock_description[1])]))
         else:
             try:
-                print(
-                    '\n' + textwrap.fill(self.description[self.counter]))
+                print('\n' + textwrap.fill(self.description[self.counter]))
             except IndexError:
                 print('\n' + textwrap.fill(self.description[-1]))
             self.increment_counter()
@@ -245,14 +253,14 @@ class Room:
     def increment_counter(self):
         self.counter += 1
 
-    def keypad(self):  # Need to implement death
+    def keypad(self):
         player = Players.get_player("player")
         code = "6824"
         while player.health > 0:
             player_attempt = input(
                 "Enter code (type \"back\" to back out):\n>  ")
             if player_attempt == code:
-                self.next_room('boss_room')
+                self.next_room('secret')
                 break
             elif player_attempt.lower() == "back":
                 self.next_room(self.branches[0])
@@ -264,8 +272,24 @@ class Room:
                 player.health -= 25
             else:
                 print("\nThe keypad lets out a quizical beep. (Invalid input)")
-        print("\nThat was stupid, death by keypad")
-        death("GAME OVER")
+        if player.health <= 0:
+            print("\nThat was stupid, death by keypad")
+            death("GAME OVER")
+
+    def aztec_statue(self):  # Special endgame scenario
+        while True:
+            choice = input("\nDo you take the statue? (yes or no)\n>  ")
+            if choice in ('y', 'yes'):
+                print("The statue was rigged to an arrow trap at the rear of the room"
+                      "\nYour greed was the death of you.")
+                death("GAME OVER")
+            elif choice in ('n', 'no'):
+                print("Your instinct yells at you to back away from the statue."
+                      "\nYou back away slowly and return to the LAB.")
+                self.next_room('lab')
+                break
+            else:
+                print("Sorry, I don't understand. type 'Yes' or 'No'")
 
     @classmethod
     def get_room(cls, name):
@@ -282,10 +306,7 @@ class Actions:
         self.args = [arg for a in args for arg in a]
 
     def run_action(self):
-        try:
-            eval('self.' + self.verb + '()')
-        except AttributeError:
-            print("\nHuh? (Invalid input. Type \"help\" for help)")
+        eval('self.' + self.verb + '()')
 
     def help(self):
         player = Players.get_player('player')
@@ -295,12 +316,34 @@ class Actions:
             Here is a list of commands:
             ==================================================
 
-            goto, examine, use, pickup, inventory, equip, quit
+            goto, examine, use, pickup, inventory, equip, status, quit
 
             ==================================================
 
             Special commands for this room: {}
             """.format(special_actions)))
+
+    def status(self):
+        player = Players.get_player('player')
+        weapon = player.equipped_weapon
+        room = player.current_room
+        try:
+            items = [i.name for i in room.items]
+        except AttributeError:
+            items = ['None']
+        print(textwrap.dedent(
+            """
+            STATUS:
+            ==============================
+            HEALTH:          {}/100
+            EQUIPPED WEAPON: {} DMG:{}  ACC:{}
+            CURRENT ROOM:    {}
+            ROOM ACTIONS:    {}
+            ROOM BRANCHES:   {}
+            ROOM ITEMS:      {}
+            """.format(player.health, weapon.name.capitalize(), weapon.dmg,
+                       weapon.acc, room.name.capitalize(), room.actions,
+                       room.branches, items)))
 
     def goto(self):
         player = Players.get_player('player')
@@ -385,7 +428,6 @@ class Actions:
         else:
             print("\nThere is no {} to use".format(item_name))
 
-    # BUG: Fixed by using original get_input method.
     def fight(self):
         # Grab needed objects
         player = Players.get_player('player')
@@ -396,13 +438,12 @@ class Actions:
         accuracy_roll = weapon.acc + randint(1, 100)
         print("You attack!. . . .")
         time.sleep(1.5)
-        if accuracy_roll > 100:  # Accuracy role must be over 100 to do anything.
-            if accuracy_roll > 85 + weapon.acc:  # If the random number was 86-100, critical hit,
+        if accuracy_roll > 100:
+            if accuracy_roll > 85 + weapon.acc:
                 print("\nCritical hit!!! You hit {} for {} damage"
                       .format(enemy.name, int(weapon.dmg * 1.5)))
                 enemy.health -= int(weapon.dmg * 1.5)
             else:
-                # Else, damage normal, give or take 5 from base weapon.
                 damage_roll = weapon.dmg + randint(-5, 5)
                 print("\nYou hit {} for {} damage".format(
                     enemy.name, damage_roll))
@@ -413,7 +454,7 @@ class Actions:
         time.sleep(1)
 
     def quit(self):
-        print("\nAre you sure you want to quit? Nothing will be saved.")
+        print("\nAre you sure you want to quit? Nothing will be saved. (yes or no)")
         opt = input(">  ").lower()
         if opt in ('y', 'yes'):  # This prevents use from typing 'you' or any word
             quit()               # with 'y' and quitting the game.
@@ -456,7 +497,7 @@ class Items:
         if player.health == 100:
             print("\nYou're not injured.")
         else:
-            player.health += 25
+            player.health += 40
             if player.health > 100:
                 player.health = 100
             self.decrement_uses()
@@ -470,10 +511,37 @@ class Items:
             current_room.lock_description[0] = 'False'
             print("\nYou lit your {}".format(self.name))
             self.decrement_uses()
-            current_room.increment_counter()
+            current_room.counter = 1
             current_room.enter_room()
         else:
             print("\nYou can't use that here")
+
+    def beartrap(self):
+        player = Players.get_player("player")
+        current_room = player.current_room
+        enemy = current_room.enemies
+        if enemy == None:
+            print("\nYou can't use that here. Try to use this in combat")
+        else:
+            print("\nYou quickly set the trap in front of you.")
+            print("You yell at the {}, baiting it to attack you.".format(enemy.name))
+            time.sleep(2)
+            print("\nThe {0} takes the bait! it jumps for your throat!"
+                  "\nYou dodge at the last moment forcing the {0} to land on the trap"
+                  "\n\n{0} takes 100 damage!!".format(enemy.name))
+            time.sleep(2)
+            enemy.health -= 100
+            self.decrement_uses()
+
+            print(" ")
+
+    def victory(self):
+        victory = parse_file(
+            'game_start.txt', 'cellphone', '*victory_sequence')
+        for v in victory:
+            print('\n' + textwrap.fill(v))
+            time.sleep(4)
+        quit()
 
     @classmethod
     def get_item(cls, name):
@@ -498,10 +566,10 @@ def main():
     # Initializes game world
     create_game_world('game_start.txt')
     player = Players('player')
-    player.current_room = Room.get_room('start')
+    player.current_room = Room.get_room('hole')
     player.current_room.enter_room()
     action_list = ['goto', 'pickup', 'examine',
-                   'use', 'help', 'inventory', 'equip', 'quit']
+                   'use', 'help', 'inventory', 'equip', 'status', 'quit']
     # Game loop
     while player.health > 0:
         opt = get_input(">  ", player.current_room, action_list)
@@ -565,7 +633,6 @@ def parse_file(filename, key, target):
             return None
 
 
-# Need to fully implement death function
 def death(message):
     print(message)
     quit()
