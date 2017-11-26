@@ -316,7 +316,14 @@ class Actions:
             Here is a list of commands:
             ==================================================
 
-            goto, examine, use, pickup, inventory, equip, status, quit
+            goto <location>: Moves you to the next room.
+            examine <item>: Inspect an item.
+            use <item>: Use an item.
+            pickup <item>: Pick up an item in the current room.
+            inventory: Display all items in your inventory.
+            equip <weapon>: Equip a weapon.
+            status: Provides general information about you and the current room.
+            quit: Quit the game.
 
             ==================================================
 
