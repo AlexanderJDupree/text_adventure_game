@@ -5,50 +5,22 @@
 # compiler: Python 3.6
 
 """
-    11/24/2017
-
-    * You can now beat the game! Using the cellphone the bear drops triggers the endgame sequence.
-
-    *Added text block of endgame sequence to game_start.txt. victory() parses and
-    prints this to screen.
-
-    *Added new action 'status'. If player types status the game will print out
-    the players health, equipped weapon & stats. The current room, available actions
-    branches, and items for that room.
-
-    *After combat the game will now print post combat room descriptions.
-
-    *Updated the room descriptions in game_start to reflect post-combat descriptions
-    and examine room descriptions. Altered some text in the descriptions to alert
-    user to items and actions available in the room.
+    11/26/2017
 
     *According to orignal game document we needed to include a priceless aztec statue
     in our story. I added a STATUE room that connects to the lab. upon entering the
     player is confronted with a choice of taking the statue or leaving it. If you take
     it springs an arrow trap and kills the player.
 
-    *Added new weapon, spear. Added it to wolf's loot table.
-
-    *rat now drops a knife.
-
-    *Beartrap is fully functional! It deals 100 damage to the enemy. and can only be
-    used in combat.
-
-    *Updated help function
-
-    *Keypad minigame can now kill the player.
-
     * Need to make death method functional and dynamic
 
     * Need to create a tutorial or readme.txt file for game
 
-    * Do we need a gun? It may be a little too powerful in conjuntion with the bear
-    trap. It will also require a special attribtue linked to the number of bullets in
-    players inventory.
-
-    * I like the combat changes to health and weapon damage! Combat feels very balanced!
-
     * Look into saving game state
+
+    * Change gun to tranquiliser or some sort. Make bear boss more about using items rather than fighting it.
+
+    * Polish up the code itself (it runs, but we can make it better :) )
 
 """
 import csv
@@ -69,7 +41,7 @@ class Players:
         self.equipped_weapon = None
         self.inventory = Players.initialize_inventory(name)
         self.equipped_weapon = self.inventory[0]
-        self.dignity = dignity  # Haven't found a use for this attribute yet.
+        self.dignity = dignity
         self.current_room = None
         self.player_objects.append(self)
 
@@ -100,14 +72,14 @@ class Players:
         else:
             print("\n{} remains unequipped.".format(item.name))
 
-    # Can still use ACTION commands outside of combat. FIXED 11/23/2017
     def combat(self, enemy):
-        action_list = ['fight', 'use', 'run', 'cry']
+        action_list = ['fight', 'use', 'run', 'cry']  # Add an equip feature
         player = Players.get_player('player')
 
         print("\nYou entered combat with {}.".format(enemy.name))
         time.sleep(.5)
 
+        # This section could definitely use some touching up
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
             for action in action_list:
@@ -142,7 +114,8 @@ class Players:
             print("\nYou were deafeated by {}".format(enemy.name))
             death("GAME OVER")
 
-    def run_away(self, enemy):
+    @staticmethod
+    def run_away(enemy):
         # Must roll above an 85 to run away
         print("Running away!. . . .")
         time.sleep(1)
@@ -368,6 +341,7 @@ class Actions:
             else:
                 print("\n{} isn't an option".format(self.args[0]))
 
+    # I don't think there's a point we use this?
     def drink(self):
         if self.args[0] == 'water':
             print("\nYou drink the water, and immediately feel nauseous.")
@@ -555,6 +529,7 @@ class Items:
 
             print(" ")
 
+    # Should be outside of Items class.
     @staticmethod
     def victory():
         player = Players.get_player('player')
@@ -589,23 +564,6 @@ class Weapons(Items):
         self.dmg = int(attributes[3])
         self.acc = int(attributes[4])
         self.weapon_objects.append(self)
-
-
-def main():
-    # Initializes game world
-    create_game_world('game_start.txt')
-    player = Players('player')
-    player.current_room = Room.get_room('hole')
-    player.current_room.enter_room()
-    action_list = ['goto', 'pickup', 'examine',
-                   'use', 'help', 'inventory', 'equip', 'status', 'quit']
-
-    # Actual game loop
-    while player.health > 0:
-        opt = get_input(">  ", player.current_room, action_list)
-        player_input = Actions(opt[0], opt[1:])
-        player_input.run_action()
-
 
 def get_input(prompt, current_room, option_list):
     try:
@@ -667,5 +625,20 @@ def death(message):
     print(message)
     quit()
 
+
+def main():
+    # Initializes game world
+    create_game_world('game_start.txt')
+    player = Players('player')
+    player.current_room = Room.get_room('hole')
+    player.current_room.enter_room()
+    action_list = ['goto', 'pickup', 'examine',
+                   'use', 'help', 'inventory', 'equip', 'status', 'quit']
+
+    # Actual game loop
+    while player.health > 0:
+        opt = get_input(">  ", player.current_room, action_list)
+        player_input = Actions(opt[0], opt[1:])
+        player_input.run_action()
 
 main()

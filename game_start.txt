@@ -155,7 +155,7 @@ spear|      1|      None|       True|   40|     80|     Crude, but an effective 
 gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 small_claws| 1|     None|       False|    10|    60|    Small, skittish claws.
 claws|      1|      None|       False|   20|     60|     Big, strong wolf claws.
-big_claws|   1|     None|       False|  27|     65|     You thought the wolf claws were big??
+big_claws|   1|     None|       False|  35|     65|     You thought the wolf claws were big??
 *end_weapons
 
 *victory_sequence
