@@ -210,7 +210,7 @@ class Room:
     def __init__(self, room_title=''):
         keywords = ['*room_descriptions', '*room_branches', '*room_count',
                     '*room_events', '*room_items', '*room_actions',
-                    '*room_lock_description', '*room_enemies']
+                    '*room_lock_description', '*room_enemies', "*room_examinations"]
         attributes = [parse_file('game_start.txt', room_title, target)
                       for target in keywords]
         self.name = room_title
@@ -227,6 +227,7 @@ class Room:
             self.enemies = Enemy(
                 name=attributes[7][0], health=int(attributes[7][1]))
         self.room_objects.append(self)
+        self.room_examination = attributes[8] # list
 
     def enter_room(self):
         player = Players.get_player('player')
@@ -318,7 +319,7 @@ class Actions:
 
             goto <location>: Moves you to the next room.
             examine <item>: Inspect an item.
-            use <item>: Use an item.
+            use <item or room>: Use an item.
             pickup <item>: Pick up an item in the current room.
             inventory: Display all items in your inventory.
             equip <weapon>: Equip a weapon.
@@ -411,20 +412,28 @@ class Actions:
                 current_room.items.remove(room_item[0])
 
     def examine(self):
-        item_name = self.args[0]
-        player = Players.get_player('player')
-        current_room = player.current_room
-        if item_name in [i.name for i in player.inventory]:
-            item = Items.get_item(item_name)
-            item.examine_item()
-        elif item_name in [i.name for i in current_room.items]:
-            item = Items.get_item(item_name)
-            item.examine_item()
-        elif item_name == 'room':
-            # Prints last description only
-            print('\n' + current_room.description[-1])
+        if len(self.args) == 0:
+            print("Examine what?")
         else:
-            print("\nThere is no {} to examine".format(item_name))
+            item_name = self.args[0]
+            player = Players.get_player('player')
+            current_room = player.current_room
+            examination = current_room.room_examination[0]
+            if item_name in [i.name for i in player.inventory]:
+                item = Items.get_item(item_name)
+                item.examine_item()
+            elif item_name == 'room':
+                if current_room.lock_description[0] == 'True':
+                    print('\n' + textwrap.fill(
+                        current_room.description[int(current_room.lock_description[1])]))
+                else:
+                    print("\n" + textwrap.fill(examination))
+            elif item_name in [i.name for i in current_room.items]:
+                item = Items.get_item(item_name)
+                item.examine_item()
+
+            else:
+                print("\nThere is no {} to examine".format(item_name))
 
     def use(self):
         item_name = self.args[0]
