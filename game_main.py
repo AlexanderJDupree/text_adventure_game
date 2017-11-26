@@ -63,7 +63,7 @@ class Players:
 
     player_objects = []
 
-    def __init__(self, name='', health=100, dignity=1):
+    def __init__(self, name='', health=100, dignity=0):
         self.name = name
         self.health = health
         self.equipped_weapon = None
@@ -103,6 +103,7 @@ class Players:
     # Can still use ACTION commands outside of combat. FIXED 11/23/2017
     def combat(self, enemy):
         action_list = ['fight', 'use', 'run', 'cry']
+        player = Players.get_player('player')
 
         print("\nYou entered combat with {}.".format(enemy.name))
         time.sleep(.5)
@@ -119,6 +120,9 @@ class Players:
                 if self.run_away(enemy) == True:
                     self.current_room.next_room(self.current_room.branches[0])
                     break
+            elif opt[0] == "cry":
+                print("Your fear overwhelms you. You sit down and cry. Crying gets you nowhere.")
+                player.dignity = 0
             else:
                 action = Actions(opt[0], opt[1:])
                 action.run_action()
@@ -139,7 +143,7 @@ class Players:
             death("GAME OVER")
 
     def run_away(self, enemy):
-        # Must roll above a 85 to run away
+        # Must roll above an 85 to run away
         print("Running away!. . . .")
         time.sleep(1)
         if randint(1, 100) > 85:
@@ -222,12 +226,12 @@ class Room:
         self.actions = attributes[5]  # list
         self.lock_description = attributes[6]  # list
         if attributes[7][0] == 'None':  # Prevents game from using Nonetype to make
-            self.enemies = None        # enemies
+            self.enemies = None         # enemies
         else:
             self.enemies = Enemy(
                 name=attributes[7][0], health=int(attributes[7][1]))
         self.room_objects.append(self)
-        self.room_examination = attributes[8] # list
+        self.room_examination = attributes[8]  # list
 
     def enter_room(self):
         player = Players.get_player('player')
@@ -551,12 +555,21 @@ class Items:
 
             print(" ")
 
-    def victory(self):
-        victory = parse_file(
-            'game_start.txt', 'cellphone', '*victory_sequence')
-        for v in victory:
-            print('\n' + textwrap.fill(v))
-            time.sleep(4)
+    @staticmethod
+    def victory():
+        player = Players.get_player('player')
+        if player.dignity == 0:
+            victory = parse_file(
+                "game_start.txt", "no_dignity", "*victory_sequence")
+            for v in victory:
+                print('\n' + textwrap.fill(v))
+                time.sleep(4)
+        else:
+            victory = parse_file(
+                'game_start.txt', 'cellphone', '*victory_sequence')
+            for v in victory:
+                print('\n' + textwrap.fill(v))
+                time.sleep(4)
         quit()
 
     @classmethod
@@ -586,7 +599,8 @@ def main():
     player.current_room.enter_room()
     action_list = ['goto', 'pickup', 'examine',
                    'use', 'help', 'inventory', 'equip', 'status', 'quit']
-    # Game loop
+
+    # Actual game loop
     while player.health > 0:
         opt = get_input(">  ", player.current_room, action_list)
         player_input = Actions(opt[0], opt[1:])
