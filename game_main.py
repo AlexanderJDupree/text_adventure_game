@@ -73,7 +73,7 @@ class Players:
             print("\n{} remains unequipped.".format(item.name))
 
     def combat(self, enemy):
-        action_list = ['fight', 'use', 'run', 'cry']  # Add an equip feature
+        action_list = ['fight', 'use', 'equip', 'run', 'inventory', 'cry']
         player = Players.get_player('player')
 
         print("\nYou entered combat with {}.".format(enemy.name))
@@ -83,7 +83,7 @@ class Players:
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
             for action in action_list:
-                if action == 'use':
+                if action == 'use' or action == 'equip':
                     print('\t' + action.capitalize(), '(item)')
                 else:
                     print('\t' + action.capitalize())
@@ -93,12 +93,17 @@ class Players:
                     self.current_room.next_room(self.current_room.branches[0])
                     break
             elif opt[0] == "cry":
-                print("Your fear overwhelms you. You sit down and cry. Crying gets you nowhere.")
+                print(
+                    "Your fear overwhelms you. You sit down and cry. Crying gets you nowhere.")
                 player.dignity = 0
+            elif opt[0] == 'inventory':
+                action = Actions(opt[0], opt[1:])
+                action.run_action()
             else:
                 action = Actions(opt[0], opt[1:])
                 action.run_action()
                 enemy.enemy_turn()
+
         if self.health > 0 and enemy.health <= 0:
             print("\nCongratulations! You defeated {}".format(enemy.name))
             loot = enemy.inventory[randint(1, len(enemy.inventory) - 1)]
@@ -203,8 +208,8 @@ class Room:
         else:
             self.enemies = Enemy(
                 name=attributes[7][0], health=int(attributes[7][1]))
-        self.room_objects.append(self)
         self.room_examination = attributes[8]  # list
+        self.room_objects.append(self)
 
     def enter_room(self):
         player = Players.get_player('player')
@@ -262,7 +267,7 @@ class Room:
                       "\nYour greed was the death of you.")
                 death("GAME OVER")
             elif choice in ('n', 'no'):
-                print("Your instinct yells at you to back away from the statue."
+                print("\nYour instinct yells at you to back away from the statue."
                       "\nYou back away slowly and return to the LAB.")
                 self.next_room('lab')
                 break
@@ -295,8 +300,8 @@ class Actions:
             ==================================================
 
             goto <location>: Moves you to the next room.
-            examine <item>: Inspect an item.
-            use <item or room>: Use an item.
+            examine <item or room>: Inspect an item.
+            use <item>: Use an item.
             pickup <item>: Pick up an item in the current room.
             inventory: Display all items in your inventory.
             equip <weapon>: Equip a weapon.
@@ -504,6 +509,7 @@ class Items:
         if current_room.lock_description[0] == 'True':
             current_room.lock_description[0] = 'False'
             print("\nYou lit your {}".format(self.name))
+            time.sleep(1)
             self.decrement_uses()
             current_room.counter = 1
             current_room.enter_room()
@@ -527,9 +533,27 @@ class Items:
             enemy.health -= 100
             self.decrement_uses()
 
-            print(" ")
-
+    def speargun(self):
+        player = Players.get_player("player")
+        current_room = player.current_room
+        enemy = current_room.enemies
+        if enemy == None:
+            print("\nYou can't use that here. Try to use this in combat")
+        else:
+            print("\nYou pull out your speargun and take aim!")
+            time.sleep(2)
+            if randint(1, 100) > 65:
+                print("\nYour aim is true! The spear is fired and lodged directly in"
+                      "\nthe {}'s chest.".format(enemy.name))
+                time.sleep(2)
+                enemy.health -= 100
+                self.decrement_uses()
+            else:
+                print("Your nerves get the better of you and you shoot far left."
+                      "\nThe spear flies past the {} and crashes into the wall.".format(enemy.name))
+                self.decrement_uses()
     # Should be outside of Items class.
+
     @staticmethod
     def victory():
         player = Players.get_player('player')
@@ -564,6 +588,7 @@ class Weapons(Items):
         self.dmg = int(attributes[3])
         self.acc = int(attributes[4])
         self.weapon_objects.append(self)
+
 
 def get_input(prompt, current_room, option_list):
     try:
@@ -621,6 +646,13 @@ def parse_file(filename, key, target):
             return None
 
 
+def readme(filename):
+    with open(filename, 'r') as f:
+        file = f.read()
+        print(file)
+    input("Press enter to continue\n>  ")
+
+
 def death(message):
     print(message)
     quit()
@@ -628,6 +660,7 @@ def death(message):
 
 def main():
     # Initializes game world
+    readme('readme.txt')
     create_game_world('game_start.txt')
     player = Players('player')
     player.current_room = Room.get_room('hole')
@@ -640,5 +673,6 @@ def main():
         opt = get_input(">  ", player.current_room, action_list)
         player_input = Actions(opt[0], opt[1:])
         player_input.run_action()
+
 
 main()

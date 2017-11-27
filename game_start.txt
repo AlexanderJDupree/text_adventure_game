@@ -10,8 +10,8 @@ left|         Somehow, your legs are functional and manage to carry you from roo
 rat|          You walk towards the sound of a rat. You're shocked. It's a rat.| With the rat dead, you see another bandage on the ground. You can goto HOLE, where you started.
 tunnel|       It's too dark. You let your eyes adjust. It's still too dark, maybe if you had a Torch. You do hear the snarl of an angry canine. You can't go on further, you must head back LEFT.|  Your torch illuminates a fearsome wolf gnawing on fresh meat.| With the wolf dead, you may head back LEFT or continue onto the EXTENSION.
 extension|    The end of the road. Your torch illuminates a Corpse lying against a wall, and a unused Beartrap sits patiently next to you. There's no where else to go but back into the TUNNEL.| End of the road, the corpse is still here but maybe you should head back to TUNNEL.
-secret|       Clicks and clacks of mechanisms hidden within the walls begin, and the door slowly opens up revealing a dimly lit, but otherwise well decorated room. You try the doors, and they're all locked except for two. A room with a CAGE startles you as a wolf attempts to jump at you in rage. However, you do spot a couple .45 magnum rounds lying within the cage. The only other available room is one labeled LAB. If you'd like, you can head back to the WATERFALL. | This lobby-esqe room is irksome. You wonder what happened here. You can head into the LAB, "greet" the wolf in the CAGE, or head back into the WATERFALL.
-cage|         A fearsome wolf is ready to unleash its rage!| With the wolf dead, it looks like you can pick up those bullets and head back to the SECRET room.
+secret|       Clicks and clacks of mechanisms hidden within the walls begin, and the door slowly opens up revealing a dimly lit, but otherwise well decorated room. You try the doors, and they're all locked except for two. A room with a CAGE startles you as a wolf attempts to jump at you in rage. However, unused speargun lying within the cage. The only other available room is one labeled LAB. If you'd like, you can head back to the WATERFALL. | This lobby-esqe room is irksome. You wonder what happened here. You can head into the LAB, "greet" the wolf in the CAGE, or head back into the WATERFALL.
+cage|         A fearsome wolf is ready to unleash its rage!| With the wolf dead, it looks like you can pick up that speargun and head back to the SECRET room.
 waterfall|    You follow the sounds to a waterfall. The water looks odd, and illuminates the cave. What's that at the base of it? You walk through the water to reveal a securely locked door with a keypad! It has four digit slots, waiting for input. What could possibly be on the other side? | The waterfall is pretty, but its slight glow is off-putting. You step up to the keypad.
 lab|          You slide the lab door open, revealing a large, starving bear helping itself to a poor sucker in a lab coat. Uh oh, this is not going to end well!| With the bear defeated you notice a priceless aztec STATUE sitting firmly upon an altar at the rear of the room. You can goto the STATUE, or it might be a good idea to just use that cellphone and get the hell out of here.
 statue|      You approach the priceless Aztec statue. It is the most glorious object you have ever laid eyes on. It's worth could bring you countless fortune and would make this hell-ish adventure worth it's literal weight in gold.
@@ -20,7 +20,7 @@ statue|      You approach the priceless Aztec statue. It is the most glorious ob
 *room_examinations
 ROOM:         EXAMINATION:
 hole|         You look up towards the light. It seems too simple a mistake to cost you your life, but fate thinks otherwise. If you played basketball through college, you feel you could simply leap up into the hole and leave. You'd rather die than play college ball, though. Turns out that may just be the truth. There is a free Bandage on the ground. You may head to the LEFT, or greet the RAT.
-left|         The Torch on the wall flickers. The cave is rather small, with the craggy rock walls arching upwards. The dark TUNNEL holds a looming fear over you. The sound of the WATERFALL keeps your peace, however. You may also head back to the HOLE.
+left|         The TORCH on the wall flickers. The cave is rather small, with the craggy rock walls arching upwards. The dark TUNNEL holds a looming fear over you. The sound of the WATERFALL keeps your peace, however. You may also head back to the HOLE.
 rat|          Poor guy, must have fallen in just as easily as you did. It is survival of the fittest, and you yearn the rewards (a knife, in this case). You may head back to the HOLE.
 tunnel|       The walls begin to narrow, signalling the end of the tunnel is near. Your shivering fear of the wolf remains after you vanquished it. This tunnel is only a continuation from the LEFT, and leads onwards into the EXTENSION.
 extension|    The stench of the corpse is a bit difficult to bare. What else is difficult to bare? The Beartrap sitting there, unused. You figure it'd be perfect for use on enemies. You can only head back into the TUNNEL.
@@ -64,9 +64,9 @@ left|   body| torch
 rat|  bandage
 tunnel| None
 waterfall| None
-extension|  code|  gun|  corpse| beartrap
+extension|  code| corpse| beartrap
 secret| None
-cage|  bullet|  bandage
+cage|  speargun|  bandage
 lab| None
 statue| None
 *end_room_items
@@ -129,7 +129,7 @@ statue|     None
 *player_inventory
 PLAYER:     ITEM:
 None|       None
-player|     fists|  bandage
+player|     fists|  bandage| speargun
 rat|        small_claws| knife
 wolf|       claws| spear| bandage
 bear|       big_claws| cellphone
@@ -139,12 +139,12 @@ bear|       big_claws| cellphone
 ITEM:       USES:   FUNCTION:       PICKUP: DESCRIPTION:
 bandage|    1|      heal()|         True|   A regular bandage. Heals 40 health.
 code|       1|      None|           True|   The note reads:  Door code: 6824
-corpse|     0|      None|           False|  This corpse is smelly and looks as if it has been mauled. In the left hand, a CODE. In the right, a GUN.
+corpse|     0|      None|           False|  This corpse is smelly and looks as if it has been mauled. He clutches the Code in his hand.
 body|       0|      None|           False|  The body is old, and rotting. There are no signs of a struggle. The only clue to his death is the pile of vomit near the water.
 cellphone|  1|      victory()|      True|   A flip phone that miraculously has signal!
 beartrap|   1|      beartrap()|     True|   A loaded bear trap, good for one use with deadly results.
 torch|      1|      light()|        True|   A torch that, miraculously, can be lit. Just like the movies.
-bullet|     2|      load_gun()|     True|   The bullet is a .44 Magnum, it'll stop anything in it's tracks.
+speargun|   1|      speargun()|     True|   It's a one-shot spear gun, just like in the movie Jaws.
 *end_items
 
 *weapons
