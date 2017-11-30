@@ -5,20 +5,19 @@
 # compiler: Python 3.6
 
 """
-    11/26/2017
+    11/29/2017
 
-    *According to orignal game document we needed to include a priceless aztec statue
-    in our story. I added a STATUE room that connects to the lab. upon entering the
-    player is confronted with a choice of taking the statue or leaving it. If you take
-    it springs an arrow trap and kills the player.
+    * Fixed examine function bug where if you examined a item like "statue"
+    and the room contained no items the game would crash and throw an attribute
+    error
 
-    * Need to make death method functional and dynamic
+    * Fixed pickup function bug where if you tried to pick an item in a room where
+    there no items the game would crash and throw an attribute error.
 
-    * Need to create a tutorial or readme.txt file for game
+    * Fixed pickup function bug where if the user typed 'pickup' with no extra
+    arguments the game would crash and throw an index error.
 
     * Look into saving game state
-
-    * Change gun to tranquiliser or some sort. Make bear boss more about using items rather than fighting it.
 
     * Polish up the code itself (it runs, but we can make it better :) )
 
@@ -375,24 +374,31 @@ class Actions:
                 player.equip_weapon(item)
 
     def pickup(self):
-        item_name = self.args[0]
+        try:
+            item_name = self.args[0]
+        except IndexError:
+            print("\n You didn't specify what to pickup!")
+            return None
         player = Players.get_player('player')
         current_room = player.current_room
-        if item_name not in [i.name for i in current_room.items]:
-            print("\nSorry, there is no {} here".format(item_name))
-        else:
-            room_item = [i for i in current_room.items if item_name == i.name]
-            if item_name in [i.name for i in player.inventory]:
-                print("\nYou picked up {}!".format(item_name))
-                item = [i for i in player.inventory if item_name == i.name]
-                item[0].uses += 1
-                current_room.items.remove(room_item[0])
-            elif room_item[0].pickup == 'False':
-                print("\n{} cannot be picked up.".format(item_name))
+        try:
+            if item_name not in [i.name for i in current_room.items]:
+                print("\nSorry, there is no {} here".format(item_name))
             else:
-                print("\nYou picked up {}!".format(item_name))
-                player.add_item(room_item[0])
-                current_room.items.remove(room_item[0])
+                room_item = [i for i in current_room.items if item_name == i.name]
+                if item_name in [i.name for i in player.inventory]:
+                    print("\nYou picked up {}!".format(item_name))
+                    item = [i for i in player.inventory if item_name == i.name]
+                    item[0].uses += 1
+                    current_room.items.remove(room_item[0])
+                elif room_item[0].pickup == 'False':
+                    print("\n{} cannot be picked up.".format(item_name))
+                else:
+                    print("\nYou picked up {}!".format(item_name))
+                    player.add_item(room_item[0])
+                    current_room.items.remove(room_item[0])
+        except AttributeError:
+            print("\nSorry, there is no {} here".format(item_name))
 
     def examine(self):
         if len(self.args) == 0:
@@ -402,6 +408,10 @@ class Actions:
             player = Players.get_player('player')
             current_room = player.current_room
             examination = current_room.room_examination[0]
+            try:
+                room_items = [i.name for i in current_room.items]
+            except AttributeError:
+                room_items = []
             if item_name in [i.name for i in player.inventory]:
                 item = Items.get_item(item_name)
                 item.examine_item()
@@ -411,12 +421,12 @@ class Actions:
                         current_room.description[int(current_room.lock_description[1])]))
                 else:
                     print("\n" + textwrap.fill(examination))
-            elif item_name in [i.name for i in current_room.items]:
+            elif item_name in room_items:
                 item = Items.get_item(item_name)
                 item.examine_item()
 
             else:
-                print("\nThere is no {} to examine".format(item_name))
+                print("\nYou can't examine {}".format(item_name))
 
     def use(self):
         item_name = self.args[0]

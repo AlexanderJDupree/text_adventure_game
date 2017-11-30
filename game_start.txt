@@ -129,7 +129,7 @@ statue|     None
 *player_inventory
 PLAYER:     ITEM:
 None|       None
-player|     fists|  bandage| speargun
+player|     fists|  bandage
 rat|        small_claws| knife
 wolf|       claws| spear| bandage
 bear|       big_claws| cellphone
@@ -149,10 +149,9 @@ speargun|   1|      speargun()|     True|   It's a one-shot spear gun, just like
 
 *weapons
 WEAPONS:    USES:   FUNCTION:   PICKUP: DMG:    ACC:     DESCRIPTION:
-fists|      1|      None|       False|  15|     70|    They're your own fists, what's there to examine??
+fists|      1|      None|       False|  20|     70|    They're your own fists, what's there to examine??
 knife|      1|      None|       True|   30|     75|    Rusty old combat knife with 'DHARMA initiative' inscribed on the hilt
 spear|      1|      None|       True|   40|     80|     Crude, but an effective spear.
-gun|        0|      load_gun(object)|   True|   100|    50| Smith & Wesson 500, a powerful magnum.
 small_claws| 1|     None|       False|    10|    60|    Small, skittish claws.
 claws|      1|      None|       False|   20|     60|     Big, strong wolf claws.
 big_claws|   1|     None|       False|  35|     65|     You thought the wolf claws were big??
