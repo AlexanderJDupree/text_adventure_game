@@ -34,7 +34,7 @@ class Players:
 
     player_objects = []
 
-    def __init__(self, name='', health=100, dignity=0):
+    def __init__(self, name='', health=100, dignity=1):
         self.name = name
         self.health = health
         self.equipped_weapon = None
@@ -347,13 +347,16 @@ class Actions:
 
     # I don't think there's a point we use this?
     def drink(self):
-        if self.args[0] == 'water':
-            print("\nYou drink the water, and immediately feel nauseous.")
-            time.sleep(2)
-            print("\nYou pass out and die.")
-            death("GAME OVER")
-        else:
-            print("\nI don't understand drink '{}'".format(self.args[0]))
+        try:
+            if self.args[0] == 'water':
+                print("\nYou drink the water, and immediately feel nauseous.")
+                time.sleep(2)
+                print("\nYou pass out and die.")
+                death("GAME OVER")
+            else:
+                print("\nI don't understand drink '{}'".format(self.args[0]))
+        except IndexError:
+            print("\n Drink what?")
 
     @staticmethod
     def inventory():
