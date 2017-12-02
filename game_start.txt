@@ -162,3 +162,25 @@ VICTORY:    SEQUENCE:
 no_dignity| The phone is about to die. Its battery is at 3%, you have time for only one call. You dial 911 and quickly explain to the dispatcher where to look for you. As you finish your story the phone cuts out and dies. There's nothing left to do but wait.| 3 hours later, you hear some commotion. It's the rescue team here to save you from this wretched cave!| The rescue team notices residue of tears in your puffy eyes. They call you a baby and tell all of your friends you're a loser. You have no dignity left within your body. You survived, but at what cost?| Congratulations you survived and beat the game!!| Game credits: Alexander DuPree, Jacob Bickle. Thanks for playing!!
 cellphone|  The phone is about to die. Its battery is at 3%, you have time for only one call. You dial 911 and quickly explain to the dispatcher where to look for you. As you finish your story the phone cuts out and dies. There's nothing left to do but wait.| 3 hours later, you hear some commotion. It's the rescue team here to save you from this wretched cave!| Congratulations you survived and beat the game!!| Game credits: Alexander DuPree, Jacob Bickle. Thanks for playing!!
 *end_victory_sequence
+
+*map
+========================-THE MAP-==========================
+    |------|    |-------|
+    |      |    |       |   |-----|
+    | LEFT |----| HOLE  |---| RAT |
+    |      |    |       |   |_____|
+    |      |    |_______|
+    |      |
+    |      |
+    |      |-------------------------------------------|
+    |               TUNNEL                  EXTENSION  |
+    |__________________________________________________|
+        |
+        |
+    |-----------|     |------------|   |-------|   |------|
+    |           |     |   SECRET   |   |       |---|STATUE|
+    |  WATER    |-----|            |   | BEAR  |   |______|
+    |  FALL     |     |----|       |---|       |
+    |           |     |CAGE|       |   |_______|
+    |___________|     |____|_______|
+===========================================================

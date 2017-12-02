@@ -78,7 +78,7 @@ class Players:
         print("\nYou entered combat with {}.".format(enemy.name))
         time.sleep(.5)
 
-        # This section could definitely use some touching up
+
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
             for action in action_list:
@@ -213,6 +213,7 @@ class Room:
     def enter_room(self):
         player = Players.get_player('player')
         player.current_room = self
+        read_map("game_start.txt")
         if self.lock_description[0] == 'True':
             print('\n' + textwrap.fill(
                 self.description[int(self.lock_description[1])]))
@@ -440,6 +441,9 @@ class Actions:
         else:
             print("\nThere is no {} to use".format(item_name))
 
+    def map(self):
+        read_map("game_start.txt")
+
     def fight(self):
         # Grab needed objects
         player = Players.get_player('player')
@@ -578,7 +582,7 @@ class Items:
                 time.sleep(4)
         else:
             victory = parse_file(
-                'game_start.txt', 'cellphone', '*victory_sequence')
+                "game_start.txt", 'cellphone', '*victory_sequence')
             for v in victory:
                 print('\n' + textwrap.fill(v))
                 time.sleep(4)
@@ -642,7 +646,7 @@ def eval_item(name):
 def parse_file(filename, key, target):
     descriptions = {}
     with open(filename, 'r') as f:
-        file = (csv.reader(f, delimiter='|'))
+        file = csv.reader(f, delimiter='|')
         for i, row in enumerate(file):
             if target in row:
                 start = i + 2
@@ -657,6 +661,19 @@ def parse_file(filename, key, target):
             return descriptions[key]
         except KeyError:
             return None
+
+
+def read_map(filename):
+    with open(filename, 'r',) as f:
+        file = csv.reader(f)
+        map_row_number = 0
+        for row_number, row in enumerate(file):
+            if "*map" in row:
+                map_row_number = row_number
+        f.seek(0, 0)
+        for row_number, row in enumerate(file):
+            if row_number > map_row_number:
+                print(''.join(row))
 
 
 def readme(filename):
@@ -679,7 +696,7 @@ def main():
     player.current_room = Room.get_room('hole')
     player.current_room.enter_room()
     action_list = ['goto', 'pickup', 'examine',
-                   'use', 'help', 'inventory', 'equip', 'status', 'quit']
+                   'use', 'help', 'inventory', 'equip', 'status', 'quit', "map"]
 
     # Actual game loop
     while player.health > 0:
