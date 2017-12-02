@@ -677,7 +677,7 @@ def read_map(filename):
                 end_map_row_number = row_number
         f.seek(0, 0)
         for row_number, row in enumerate(file):
-            if map_row_number < row_number and row_number < end_map_row_number:
+            if row_number in range(map_row_number + 1, end_map_row_number):
                 print(''.join(row))
 
 
