@@ -265,7 +265,11 @@ class Room:
         while True:
             choice = input("\nDo you take the statue? (yes or no)\n>  ")
             if choice in ('y', 'yes'):
-                print("The statue was rigged to an arrow trap at the rear of the room"
+                print("You slowly, and carefully swap the statue with your phone.")
+                time.sleep(2)
+                print("You're holding the most prised posestion. But you still need the phone!")
+                time.sleep(2)
+                print("You hear a click. The walls shoot poison darts at you."
                       "\nYour greed was the death of you.")
                 death("GAME OVER")
             elif choice in ('n', 'no'):
@@ -274,7 +278,7 @@ class Room:
                 self.next_room('lab')
                 break
             else:
-                print("Sorry, I don't understand. type 'Yes' or 'No'")
+                print("Sorry, I don't understand. Type 'Yes' or 'No'")
 
     @classmethod
     def get_room(cls, name):
