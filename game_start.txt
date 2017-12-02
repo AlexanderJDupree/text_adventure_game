@@ -184,3 +184,4 @@ cellphone|  The phone is about to die. Its battery is at 3%, you have time for o
     |           |     |CAGE|       |   |_______|
     |___________|     |____|_______|
 ===========================================================
+*end_map_sequence

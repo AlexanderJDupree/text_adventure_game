@@ -84,6 +84,8 @@ class Players:
             for action in action_list:
                 if action == 'use' or action == 'equip':
                     print('\t' + action.capitalize(), '(item)')
+                if action == "fight":
+                    print('\t' + action.capitalize(), "(currently equipped: " + str((player.equipped_weapon).name) + ')')
                 else:
                     print('\t' + action.capitalize())
             opt = get_input("\n>  ", self.current_room, action_list)
@@ -667,12 +669,15 @@ def read_map(filename):
     with open(filename, 'r',) as f:
         file = csv.reader(f)
         map_row_number = 0
+        end_map_row_number = 0
         for row_number, row in enumerate(file):
             if "*map" in row:
                 map_row_number = row_number
+            if "*end_map_sequence" in row:
+                end_map_row_number = row_number
         f.seek(0, 0)
         for row_number, row in enumerate(file):
-            if row_number > map_row_number:
+            if map_row_number < row_number and row_number < end_map_row_number:
                 print(''.join(row))
 
 
