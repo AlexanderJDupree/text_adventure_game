@@ -1,0 +1,180 @@
+*death
+                           ...----....
+                         ..-:"''         ''"-..
+                      .-'                      '-.
+                    .'              .     .       '.
+                  .'   .          .    .      .    .''.
+                .'  .    .       .   .   .     .   . ..:.
+              .' .   . .  .       .   .   ..  .   . ....::.
+             ..   .   .      .  .    .     .  ..  . ....:IA.
+            .:  .   .    .    .  .  .    .. .  .. .. ....:IA.
+           .: .   .   ..   .    .     . . .. . ... ....:.:VHA.
+           '..  .  .. .   .       .  . .. . .. . .....:.::IHHB.
+          .:. .  . .  . .   .  .  . . . ...:.:... .......:HIHMM.
+         .:.... .   . ."::"'.. .   .  . .:.:.:II;,. .. ..:IHIMMA
+         ':.:..  ..::IHHHHHI::. . .  ...:.::::.,,,. . ....VIMMHM
+        .:::I. .AHHHHHHHHHHAI::. .:...,:IIHHHHHHMMMHHL:. . VMMMM
+       .:.:V.:IVHHHHHHHMHMHHH::..:" .:HIHHHHHHHHHHHHHMHHA. .VMMM.
+       :..V.:IVHHHHHMMHHHHHHHB... . .:VPHHMHHHMMHHHHHHHHHAI.:VMMI
+       ::V..:VIHHHHHHMMMHHHHHH. .   .I":IIMHHMMHHHHHHHHHHHAPI:WMM
+       ::". .:.HHHHHHHHMMHHHHHI.  . .:..I:MHMMHHHHHHHHHMHV:':H:WM
+       :: . :.::IIHHHHHHMMHHHHV  .ABA.:.:IMHMHMMMHMHHHHV:'. .IHWW
+       '.  ..:..:.:IHHHHHMMHV" .AVMHMA.:.'VHMMMMHHHHHV:' .  :IHWV
+        :.  .:...:".:.:TPP"   .AVMMHMMA.:. "VMMHHHP.:... .. :IVAI
+       .:.   '... .:"'   .   ..HMMMHMMMA::. ."VHHI:::....  .:IHW'
+       ...  .  . ..:IIPPIH: ..HMMMI.MMMV:I:.  .:ILLH:.. ...:I:IM
+     : .   .'"' .:.V". .. .  :HMMM:IMMMI::I. ..:HHIIPPHI::'.P:HM.
+     :.  .  .  .. ..:.. .    :AMMM IMMMM..:...:IV":T::I::.".:IHIMA
+     'V:.. .. . .. .  .  .   'VMMV..VMMV :....:V:.:..:....::IHHHMH
+       "IHH:.II:.. .:. .  . . . " :HB"" . . ..PI:.::.:::..:IHHMMV"
+        :IP""HHII:.  .  .    . . .'V:. . . ..:IH:.:.::IHIHHMMMMM"
+        :V:. VIMA:I..  .     .  . .. . .  .:.I:I:..:IHHHHMMHHMMM
+        :"VI:.VWMA::. .:      .   .. .:. ..:.I::.:IVHHHMMMHMMMMI
+        :."VIIHHMMA:.  .   .   .:  .:.. . .:.II:I:AMMMMMMHMMMMMI
+        :..VIHIHMMMI...::.,:.,:!"I:!"I!"I!"V:AI:VAMMMMMMHMMMMMM'
+        ':.:HIHIMHHA:"!!"I.:AXXXVVXXXXXXXA:."HPHIMMMMHHMHMMMMMV
+          V:H:I:MA:W'I :AXXXIXII:IIIISSSSSSXXA.I.VMMMHMHMMMMMM
+            'I::IVA ASSSSXSSSSBBSBMBSSSSSSBBMMMBS.VVMMHIMM'"'
+             I:: VPAIMSSSSSSSSSBSSSMMBSSSBBMMMMXXI:MMHIMMI
+            .I::. "H:XIIXBBMMMMMMMMMMMMMMMMMBXIXXMMPHIIMM'
+            :::I.  ':XSSXXIIIIXSSBMBSSXXXIIIXXSMMAMI:.IMM
+            :::I:.  .VSSSSSISISISSSBII:ISSSSBMMB:MI:..:MM
+            ::.I:.  ':"SSSSSSSISISSXIIXSSSSBMMB:AHI:..MMM.
+            ::.I:. . ..:"BBSSSSSSSSSSSSBBBMMMB:AHHI::.HMMI
+            :..::.  . ..::":BBBBBSSBBBMMMB:MMMMHHII::IHHMI
+            ':.I:... ....:IHHHHHMMMMMMMMMMMMMMMHHIIIIHMMV"
+              "V:. ..:...:.IHHHMMMMMMMMMMMMMMMMHHHMHHMHP'
+               ':. .:::.:.::III::IHHHHMMMMMHMHMMHHHHM"
+                 "::....::.:::..:..::IIIIIHHHHMMMHHMV"
+                   "::.::.. .. .  ...:::IIHHMMMMHMV"
+                     "V::... . .I::IHHMMV"'
+                       '"VHVHHHAHHHHMMV:"'
+credits: https://www.asciiworld.com/-Death-Co-.html
+*end_death
+
+*wolf
+      /^\      /^\
+      |  \    /  |
+      ||\ \../ /||
+      )'        `(
+     ,;`w,    ,w';,
+     ;,  ) __ (  ,;
+      ;  \(\/)/  ;;
+     ;|  |vwwv|    ``-...
+      ;  `lwwl'   ;      ```''-.
+     ;| ; `""' ; ;              `.
+      ;         ,   ,          , |
+      '  ;      ;   l    .     | |
+      ;    ,  ,    |,-,._|      \;
+       ;  ; `' ;   '    \ `\     \;
+       |  |    |  |     |   |    |;
+       |  ;    ;  |      \   \   (;
+       | |      | l       | | \  |
+       | |      | |       | |  ) |
+       | |      | ;       | |  | |
+       ; ,      : ,      ,_.'  | |
+      :__'      | |           ,_.'
+credits: http://www.ascii-art.de/ascii/uvw/w\olf.txt
+*end_wolf
+
+*bear
+
+                        _.--""""--.._
+                         _.""    .'       `-._
+                       .";      ;           ; `-.
+                      / /     .'           ;     `.
+                     / ;     ;             ;       \
+                    ; :      :             :     `-.\
+                    ; ;      :              `.      `;
+                    : :      :                \      :
+                    : \      `:                \   `.;
+                     \ \      `;                ;    ;
+                      \ : .'   ;                |   ;
+                       `>'     :              `.;   )
+                       / _.'               `.  ;/ _(
+                      ;,'     ;    `.        `.;    `-.
+                     ;' .'   :    `. `.       / \, \ \ \
+                     :,'     :      `. `. \  ; ::\_/_/_/::
+                   .-=:.-"  -,-   "-.,=-.\ ;.; :::; ; ;::
+                   |(`.`     :       .')| \: `.  :::::::
+                    \\/      :       \//   ;   \              _____
+                     :      .:.       :  _/     ;             \hjw:
+           /         ;                ;  ;      |              \"""
+         .'          :    _     _    ;  /       ;              /|
+        /             `.  \;   ;/  .' .'       /              /:|
+       |                !  :   :  !_.'        /           .--::/
+       |\___             `.:   :.'/\         ;      ____.':|:|/
+       \:::|\              \ _ /  | :       :   ___/|:::|:'"""
+        `""|:\             ;"^"   | !       :__/|::|/""""
+           \::\_____     .-'      | ;       |::|/""
+            \:|::::|\   / / /    / /       /"""
+             \|::::|:`--\_\_\__.'-|       ;
+               """" \::::::::::::/      .'
+                     """"'"""".-'      (
+              __,------.__.--/ , ,  , |/--._
+             /              :\|  |  |v'     \_
+            |\              :::v-;v-'::       \
+            \:\              :::::::::         \
+             \|`-.                             /|
+               `: \          ____         ____/:/
+                 \|:-.______/|::|\       /|:::|/
+                  |::|:::::|:/"""\\_____/:/""""
+                  `-:|:::::|/     \|::::|/
+                     `"""""'       `""""'
+credits: http://www.asciiworld.com/-Bea\r-.html
+*end_bear
+
+*rat
+         __             _,-"~^"-.
+       _// )      _,-"~`         `.
+     ." ( /`"-,-"`                 ;
+    / 6                             ;
+   /           ,             ,-"     ;
+  (,__.--.      \           /        ;
+   //'   /`-.\   |          |        `._________
+     _.-'_/`  )  )--...,,,___\     \-----------,)
+   ((("~` _.-'.-'           __`-.   )         //
+     jgs ((("`             (((---~"`         //
+                                            ((________________
+                                            `----""""~~~~^^^```
+credits: http://www.chris.com/ascii/index.php?art=animals/rodents/other
+*end_rat
+
+*statue
+
+                  {}
+                 /__\
+               /|    |\
+              (_|    |_)
+                 \  /
+                  )(
+                _|__|_
+              _|______|_
+             |__________|
+*end_statue
+
+*victory
+            _
+           /(|
+          (  :
+         __\  \  _____
+       (____)  `|
+      (____)|   |
+       (____).__|
+        (___)__.|_____
+credits: https://www.ascii-art.net/content.php?id=hands
+*end_victory
+
+*no_dignity
+.----------------. .----------------. .----------------.   .----------------. .----------------. .----------------. .----------------.
+| .--------------. | .--------------. | .--------------. | | .--------------. | .--------------. | .--------------. | .--------------. |
+| |     ______   | | |  _______     | | |  ____  ____  | | | |   ______     | | |      __      | | |   ______     | | |  ____  ____  | |
+| |   .' ___  |  | | | |_   __ \    | | | |_  _||_  _| | | | |  |_   _ \    | | |     /  \     | | |  |_   _ \    | | | |_  _||_  _| | |
+| |  / .'   \_|  | | |   | |__) |   | | |   \ \  / /   | | | |    | |_) |   | | |    / /\ \    | | |    | |_) |   | | |   \ \  / /   | |
+| |  | |         | | |   |  __ /    | | |    \ \/ /    | | | |    |  __'.   | | |   / ____ \   | | |    |  __'.   | | |    \ \/ /    | |
+| |  \ `.___.'\  | | |  _| |  \ \_  | | |    _|  |_    | | | |   _| |__) |  | | | _/ /    \ \_ | | |   _| |__) |  | | |    _|  |_    | |
+| |   `._____.'  | | | |____| |___| | | |   |______|   | | | |  |_______/   | | ||____|  |____|| | |  |_______/   | | |   |______|   | |
+| |              | | |              | | |              | | | |              | | |              | | |              | | |              | |
+| '--------------' | '--------------' | '--------------' | | '--------------' | '--------------' | '--------------' | '--------------' |
+ '----------------' '----------------' '----------------'   '----------------' '----------------' '----------------' '----------------'
+*end_no_dignity

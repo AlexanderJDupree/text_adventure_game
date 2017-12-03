@@ -1,5 +1,7 @@
 Welcome to Kode Bros text-adventure-game for CS160!
 
+It is recommended you play our game in fullscreen!
+
 There are a few commands you should get familiar with before you play our game.
 Here are some global commands:
 

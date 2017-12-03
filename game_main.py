@@ -5,22 +5,28 @@
 # compiler: Python 3.6
 
 """
-    11/29/2017
+    12/03/2017
 
-    * Fixed examine function bug where if you examined a item like "statue"
-    and the room contained no items the game would crash and throw an attribute
-    error
+    * Fixed bug in equip function, if player pressed enter without any arguments the
+    game would crash
 
-    * Fixed pickup function bug where if you tried to pick an item in a room where
-    there no items the game would crash and throw an attribute error.
+    * Fixed reprinting of action list in combat function. the for loop needed an elif
+    statement
 
-    * Fixed pickup function bug where if the user typed 'pickup' with no extra
-    arguments the game would crash and throw an index error.
+    *Map is now fully dynamic! The map will update the current room title to 'player'
+    as well as 'XXXXX' any undiscovered rooms. Rooms that are adjoining the players
+    room are added to the discovered_rooms attribute.
 
-    * Look into saving game state
+    *moved map to a sperate game_map.txt file, this made parsing the map a whole lot easier.
 
-    * Polish up the code itself (it runs, but we can make it better :) )
+    * Added Ascii art to all encounters, game endings, and deaths! The art is stored
+    in the game_art.txt file
 
+    * Reduced bear health by 50.
+
+    * Increased the accuracy of all player weapons by 5
+
+    * look into a move list for the fighting function.
 """
 import csv
 import textwrap
@@ -43,6 +49,7 @@ class Players:
         self.dignity = dignity
         self.current_room = None
         self.player_objects.append(self)
+        self.discovered_rooms = []
 
     def read_inventory(self):
         print("\nInventory:\n====================")
@@ -65,7 +72,7 @@ class Players:
     def equip_weapon(self, item):
         print("\nEquip {}? (yes or no)".format(item.name))
         opt = input(">  ")
-        if opt[0].lower() in ('y', 'yes'):
+        if opt.lower() in ('y', 'yes'):
             self.equipped_weapon = item
             print("You equipped {}!\n".format(item.name))
         else:
@@ -76,16 +83,18 @@ class Players:
         player = Players.get_player('player')
 
         print("\nYou entered combat with {}.".format(enemy.name))
-        time.sleep(.5)
-
+        get_graphics('game_art.txt', enemy.name)
+        time.sleep(1)
 
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
             for action in action_list:
                 if action == 'use' or action == 'equip':
                     print('\t' + action.capitalize(), '(item)')
-                if action == "fight":
-                    print('\t' + action.capitalize(), "(currently equipped: " + str((player.equipped_weapon).name) + ')')
+                elif action == "fight":
+                    print('\t' + action.capitalize(),
+                        "(Current Weapon: "
+                        + (player.equipped_weapon).name.capitalize() + ')')
                 else:
                     print('\t' + action.capitalize())
             opt = get_input("\n>  ", self.current_room, action_list)
@@ -159,7 +168,7 @@ class Enemy(Players):
 
     def enemy_turn(self):
         if self.health <= 0:  # Prevents enemy from taking another turn after killed
-            print("\nThe {} was killed!".format(self.name))
+            print("\nThe {} was defeated!".format(self.name))
         else:
             player = Players.get_player('player')
             weapon = self.equipped_weapon
@@ -215,15 +224,20 @@ class Room:
     def enter_room(self):
         player = Players.get_player('player')
         player.current_room = self
-        read_map("game_start.txt")
+        player.discovered_rooms.append(self.name)
+        player.discovered_rooms += player.current_room.branches
+
         if self.lock_description[0] == 'True':
-            print('\n' + textwrap.fill(
+            load_map('game_map.txt')
+            print('\n\n' + textwrap.fill(
                 self.description[int(self.lock_description[1])]))
         else:
+            if self.events == 'None':
+                load_map('game_map.txt')
             try:
-                print('\n' + textwrap.fill(self.description[self.counter]))
+                print('\n\n' + textwrap.fill(self.description[self.counter]))
             except IndexError:
-                print('\n' + textwrap.fill(self.description[-1]))
+                print('\n\n' + textwrap.fill(self.description[-1]))
             self.increment_counter()
             eval(self.events)
 
@@ -262,12 +276,13 @@ class Room:
             death("GAME OVER")
 
     def aztec_statue(self):  # Special endgame scenario
+        get_graphics('game_art.txt', 'statue')
         while True:
             choice = input("\nDo you take the statue? (yes or no)\n>  ")
             if choice in ('y', 'yes'):
                 print("You slowly, and carefully swap the statue with your phone.")
                 time.sleep(2)
-                print("You're holding the most prised posestion. But you still need the phone!")
+                print("You're holding the most prized posestion. But you still need the phone!")
                 time.sleep(2)
                 print("You hear a click. The walls shoot poison darts at you."
                       "\nYour greed was the death of you.")
@@ -312,6 +327,7 @@ class Actions:
             inventory: Display all items in your inventory.
             equip <weapon>: Equip a weapon.
             status: Provides general information about you and the current room.
+            map: Displays map
             quit: Quit the game.
 
             ==================================================
@@ -352,7 +368,6 @@ class Actions:
             else:
                 print("\n{} isn't an option".format(self.args[0]))
 
-    # I don't think there's a point we use this?
     def drink(self):
         try:
             if self.args[0] == 'water':
@@ -382,6 +397,17 @@ class Actions:
                 print("\nYou can't equip {}".format(item.name))
             else:
                 player.equip_weapon(item)
+
+    def pet(self):
+        player = Players.get_player('player')
+        enemy = player.current_room.enemies
+        print(textwrap.dedent("""
+            The {0} is taken aback by your friendly gesture.
+            You scratch him behind the ears, he loves it and decides to be your friend.
+            The {0} leaves you in peace.
+            """.format(enemy.name)))
+        enemy.health = 0
+        time.sleep(2)
 
     def pickup(self):
         try:
@@ -448,7 +474,7 @@ class Actions:
             print("\nThere is no {} to use".format(item_name))
 
     def map(self):
-        read_map("game_start.txt")
+        load_map('game_map.txt')
 
     def fight(self):
         # Grab needed objects
@@ -586,12 +612,14 @@ class Items:
             for v in victory:
                 print('\n' + textwrap.fill(v))
                 time.sleep(4)
+            get_graphics('game_art.txt', 'no_dignity')
         else:
             victory = parse_file(
                 "game_start.txt", 'cellphone', '*victory_sequence')
             for v in victory:
                 print('\n' + textwrap.fill(v))
                 time.sleep(4)
+            get_graphics('game_art.txt', 'victory')
         quit()
 
     @classmethod
@@ -668,21 +696,22 @@ def parse_file(filename, key, target):
         except KeyError:
             return None
 
-
-def read_map(filename):
-    with open(filename, 'r',) as f:
-        file = csv.reader(f)
-        map_row_number = 0
-        end_map_row_number = 0
-        for row_number, row in enumerate(file):
-            if "*map" in row:
-                map_row_number = row_number
-            if "*end_map_sequence" in row:
-                end_map_row_number = row_number
-        f.seek(0, 0)
-        for row_number, row in enumerate(file):
-            if row_number in range(map_row_number + 1, end_map_row_number):
-                print(''.join(row))
+def load_map(filename):
+    player = Players.get_player('player')
+    rooms = set(player.discovered_rooms)
+    with open(filename, 'r') as f:
+        file = [line.split('|') for line in f.readlines()]
+        for line in file:
+            for element in line:
+                if element.strip().lower() not in rooms:
+                    line[line.index(element)] = ''.join(
+                        [c if not c.isalnum() else 'X' for c in element])
+                elif element.strip().lower() == player.current_room.name:
+                    line[line.index(element)] = 'PLAYER' + ' ' * (len(element) - 6)
+        print()
+        for line in file:
+            print('|'.join(line), end = '')
+            time.sleep(.04)
 
 
 def readme(filename):
@@ -691,9 +720,19 @@ def readme(filename):
         print(file)
     input("Press enter to continue\n>  ")
 
+def get_graphics(filename, target):
+    with open(filename, 'r') as f:
+        file = f.readlines()
+        print_line = False
+        for line in file:
+            if target in line:
+                    print_line = not print_line
+            elif print_line == True:
+                print(line, end = '')
 
 def death(message):
     print(message)
+    get_graphics('game_art.txt', 'death')
     quit()
 
 
