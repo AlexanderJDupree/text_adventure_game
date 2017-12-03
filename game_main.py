@@ -78,12 +78,14 @@ class Players:
         print("\nYou entered combat with {}.".format(enemy.name))
         time.sleep(.5)
 
-        # This section could definitely use some touching up
+
         while self.health > 0 and enemy.health > 0:
             print("\nActions:")
             for action in action_list:
                 if action == 'use' or action == 'equip':
                     print('\t' + action.capitalize(), '(item)')
+                if action == "fight":
+                    print('\t' + action.capitalize(), "(currently equipped: " + str((player.equipped_weapon).name) + ')')
                 else:
                     print('\t' + action.capitalize())
             opt = get_input("\n>  ", self.current_room, action_list)
@@ -213,6 +215,7 @@ class Room:
     def enter_room(self):
         player = Players.get_player('player')
         player.current_room = self
+        read_map("game_start.txt")
         if self.lock_description[0] == 'True':
             print('\n' + textwrap.fill(
                 self.description[int(self.lock_description[1])]))
@@ -262,7 +265,11 @@ class Room:
         while True:
             choice = input("\nDo you take the statue? (yes or no)\n>  ")
             if choice in ('y', 'yes'):
-                print("The statue was rigged to an arrow trap at the rear of the room"
+                print("You slowly, and carefully swap the statue with your phone.")
+                time.sleep(2)
+                print("You're holding the most prised posestion. But you still need the phone!")
+                time.sleep(2)
+                print("You hear a click. The walls shoot poison darts at you."
                       "\nYour greed was the death of you.")
                 death("GAME OVER")
             elif choice in ('n', 'no'):
@@ -271,7 +278,7 @@ class Room:
                 self.next_room('lab')
                 break
             else:
-                print("Sorry, I don't understand. type 'Yes' or 'No'")
+                print("Sorry, I don't understand. Type 'Yes' or 'No'")
 
     @classmethod
     def get_room(cls, name):
@@ -440,6 +447,9 @@ class Actions:
         else:
             print("\nThere is no {} to use".format(item_name))
 
+    def map(self):
+        read_map("game_start.txt")
+
     def fight(self):
         # Grab needed objects
         player = Players.get_player('player')
@@ -578,7 +588,7 @@ class Items:
                 time.sleep(4)
         else:
             victory = parse_file(
-                'game_start.txt', 'cellphone', '*victory_sequence')
+                "game_start.txt", 'cellphone', '*victory_sequence')
             for v in victory:
                 print('\n' + textwrap.fill(v))
                 time.sleep(4)
@@ -642,7 +652,7 @@ def eval_item(name):
 def parse_file(filename, key, target):
     descriptions = {}
     with open(filename, 'r') as f:
-        file = (csv.reader(f, delimiter='|'))
+        file = csv.reader(f, delimiter='|')
         for i, row in enumerate(file):
             if target in row:
                 start = i + 2
@@ -657,6 +667,22 @@ def parse_file(filename, key, target):
             return descriptions[key]
         except KeyError:
             return None
+
+
+def read_map(filename):
+    with open(filename, 'r',) as f:
+        file = csv.reader(f)
+        map_row_number = 0
+        end_map_row_number = 0
+        for row_number, row in enumerate(file):
+            if "*map" in row:
+                map_row_number = row_number
+            if "*end_map_sequence" in row:
+                end_map_row_number = row_number
+        f.seek(0, 0)
+        for row_number, row in enumerate(file):
+            if row_number in range(map_row_number + 1, end_map_row_number):
+                print(''.join(row))
 
 
 def readme(filename):
@@ -679,7 +705,7 @@ def main():
     player.current_room = Room.get_room('hole')
     player.current_room.enter_room()
     action_list = ['goto', 'pickup', 'examine',
-                   'use', 'help', 'inventory', 'equip', 'status', 'quit']
+                   'use', 'help', 'inventory', 'equip', 'status', 'quit', "map"]
 
     # Actual game loop
     while player.health > 0:
