@@ -118,7 +118,7 @@ class Players:
             print("\nCongratulations! You defeated {}".format(enemy.name))
             loot = enemy.inventory[randint(1, len(enemy.inventory) - 1)]
             time.sleep(1)
-            print("{} dropped a {}".format(enemy.name, loot.name))
+            print("{} dropped a {}. You picked it up.".format(enemy.name, loot.name))
             self.add_item(loot)
             self.current_room.enemies = None
             self.current_room.events = 'None'
@@ -257,7 +257,7 @@ class Room:
         code = "6824"
         while player.health > 0:
             player_attempt = input(
-                "Enter code (type \"back\" to back out):\n>  ")
+                "Enter code (type \"back\" to back out): ")
             if player_attempt == code:
                 self.next_room('secret')
                 break
@@ -401,19 +401,23 @@ class Actions:
     def pet(self):
         player = Players.get_player('player')
         enemy = player.current_room.enemies
-        print(textwrap.dedent("""
-            The {0} is taken aback by your friendly gesture.
-            You scratch him behind the ears, he loves it and decides to be your friend.
-            The {0} leaves you in peace.
-            """.format(enemy.name)))
-        enemy.health = 0
-        time.sleep(2)
+        try:
+            print(textwrap.dedent("""
+                The {0} is taken aback by your friendly gesture.
+                You scratch him behind the ears, he loves it and decides to be your friend.
+                The {0} leaves you in peace.
+                """.format(enemy.name)))
+            enemy.health = 0
+            time.sleep(2)
+        except AttributeError:
+            print("There is nothing to pet.")
+
 
     def pickup(self):
         try:
             item_name = self.args[0]
         except IndexError:
-            print("\n You didn't specify what to pickup!")
+            print("\nYou didn't specify what to pickup!")
             return None
         player = Players.get_player('player')
         current_room = player.current_room
@@ -705,7 +709,7 @@ def load_map(filename):
             for element in line:
                 if element.strip().lower() not in rooms:
                     line[line.index(element)] = ''.join(
-                        [c if not c.isalnum() else 'X' for c in element])
+                        [c if not c.isalnum() else ' ' for c in element])
                 elif element.strip().lower() == player.current_room.name:
                     line[line.index(element)] = 'PLAYER' + ' ' * (len(element) - 6)
         print()
