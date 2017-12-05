@@ -12,7 +12,7 @@ rat|          You walk towards the sound of a rat. You're shocked. It's a rat.| 
 tunnel|       It's too dark. You let your eyes adjust. It's still too dark. You hear the snarl of an angry canine. You can't go on further, unless you use a Torch. Where had you seen one before?|  Your torch illuminates a fearsome wolf gnawing on fresh meat.| With the wolf dead, you may head back LEFT or continue onto the EXTENSION.
 extension|    The end of the road. Your torch illuminates a Corpse lying against a wall, and a unused Beartrap sits patiently next to you. There's no where else to go but back into the TUNNEL.| End of the road, the corpse is still here but maybe you should head back to TUNNEL.
 secret|       Clicks and clacks of mechanisms hidden within the walls begin, and the door slowly opens up revealing a dimly lit, but otherwise well decorated room. You try the doors, and they're all locked except for two. A room with a CAGE startles you as a wolf attempts to jump at you in rage. You figure it may be best to not mess with it, however you notice an unused speargun lying within the cage. The only other available room is one labeled LAB. If you'd like, you can head back to the WATERFALL. | This lobby-esqe room is irksome. You wonder what happened here. You can head into the LAB, "greet" the wolf in the CAGE, or head back into the WATERFALL.
-cage|         A fearsome wolf is ready to unleash its rage!| With the wolf dead, it looks like you can pick up that speargun and head back to the SECRET room.
+cage|         A fearsome wolf is ready to unleash its rage!| With the wolf dead, it looks like you can pick up that Speargun and head back to the SECRET room.
 waterfall|    You follow the sounds to a waterfall. The water looks odd, and illuminates the cave. What's that at the base of it? You walk through the water to reveal a securely locked door with a keypad! It has four digit slots, waiting for input. What could possibly be on the other side? | The waterfall is pretty, but its slight glow is off-putting. You step up to the keypad.
 lab|          You slide the lab door open, revealing a large, starving bear helping itself to a poor sucker in a lab coat. Uh oh, this is not going to end well!| With the bear defeated you notice a priceless aztec STATUE sitting firmly upon an altar at the rear of the room. You can goto the STATUE, or it might be a good idea to just use that cellphone and get the hell out of here.
 statue|      You approach the priceless Aztec statue. It is the most glorious object you have ever laid eyes on. It's worth could bring you countless fortune and would make this hell-ish adventure worth it's literal weight in gold.
@@ -155,7 +155,7 @@ knife|      1|      None|       True|   30|     85|    Rusty old combat knife wi
 spear|      1|      None|       True|   40|     80|     Crude, but an effective spear.
 small_claws| 1|     None|       False|    10|    60|    Small, skittish claws.
 claws|      1|      None|       False|   20|     60|     Big, strong wolf claws.
-big_claws|   1|     None|       False|  35|     65|     You thought the wolf claws were big??
+big_claws|   1|     None|       False|  30|     65|     You thought the wolf claws were big??
 
 *end_weapons
 
