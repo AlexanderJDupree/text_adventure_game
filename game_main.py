@@ -26,7 +26,6 @@
 
     * Increased the accuracy of all player weapons by 5
 
-    * look into a move list for the fighting function.
 """
 import csv
 import textwrap
@@ -93,8 +92,8 @@ class Players:
                     print('\t' + action.capitalize(), '(item)')
                 elif action == "fight":
                     print('\t' + action.capitalize(),
-                        "(Current Weapon: "
-                        + (player.equipped_weapon).name.capitalize() + ')')
+                          "(Current Weapon: "
+                          + (player.equipped_weapon).name.capitalize() + ')')
                 else:
                     print('\t' + action.capitalize())
             opt = get_input("\n>  ", self.current_room, action_list)
@@ -118,7 +117,8 @@ class Players:
             print("\nCongratulations! You defeated {}".format(enemy.name))
             loot = enemy.inventory[randint(1, len(enemy.inventory) - 1)]
             time.sleep(1)
-            print("{} dropped a {}. You picked it up.".format(enemy.name, loot.name))
+            print("{} dropped a {}. You picked it up.".format(
+                enemy.name, loot.name))
             self.add_item(loot)
             self.current_room.enemies = None
             self.current_room.events = 'None'
@@ -282,7 +282,8 @@ class Room:
             if choice in ('y', 'yes'):
                 print("You slowly, and carefully swap the statue with your phone.")
                 time.sleep(2)
-                print("You're holding the most prized posestion. But you still need the phone!")
+                print(
+                    "You're holding the most prized posestion. But you still need the phone!")
                 time.sleep(2)
                 print("You hear a click. The walls shoot poison darts at you."
                       "\nYour greed was the death of you.")
@@ -387,16 +388,19 @@ class Actions:
 
     def equip(self):
         player = Players.get_player('player')
-        if self.args[0] not in [i.name for i in player.inventory]:
-            print("\nThere is no {} to equip".format(self.args[0]))
-        else:
-            item = Items.get_item(self.args[0])
-            if item == player.equipped_weapon:
-                print("\n{} is already equipped.".format(item.name))
-            elif item not in Weapons.weapon_objects:
-                print("\nYou can't equip {}".format(item.name))
+        try:
+            if self.args[0] not in [i.name for i in player.inventory]:
+                print("\nThere is no {} to equip".format(self.args[0]))
             else:
-                player.equip_weapon(item)
+                item = Items.get_item(self.args[0])
+                if item == player.equipped_weapon:
+                    print("\n{} is already equipped.".format(item.name))
+                elif item not in Weapons.weapon_objects:
+                    print("\nYou can't equip {}".format(item.name))
+                else:
+                    player.equip_weapon(item)
+        except IndexError:
+            print("\nEquip what?")
 
     def pet(self):
         player = Players.get_player('player')
@@ -412,7 +416,6 @@ class Actions:
         except AttributeError:
             print("There is nothing to pet.")
 
-
     def pickup(self):
         try:
             item_name = self.args[0]
@@ -425,7 +428,8 @@ class Actions:
             if item_name not in [i.name for i in current_room.items]:
                 print("\nSorry, there is no {} here".format(item_name))
             else:
-                room_item = [i for i in current_room.items if item_name == i.name]
+                room_item = [
+                    i for i in current_room.items if item_name == i.name]
                 if item_name in [i.name for i in player.inventory]:
                     print("\nYou picked up {}!".format(item_name))
                     item = [i for i in player.inventory if item_name == i.name]
@@ -469,13 +473,16 @@ class Actions:
                 print("\nYou can't examine {}".format(item_name))
 
     def use(self):
-        item_name = self.args[0]
-        player = Players.get_player('player')
-        if item_name in [i.name for i in player.inventory]:
-            item = [i for i in player.inventory if item_name == i.name]
-            item[0].use_item()
-        else:
-            print("\nThere is no {} to use".format(item_name))
+        try:
+            item_name = self.args[0]
+            player = Players.get_player('player')
+            if item_name in [i.name for i in player.inventory]:
+                item = [i for i in player.inventory if item_name == i.name]
+                item[0].use_item()
+            else:
+                print("\nThere is no {} to use".format(item_name))
+        except IndexError:
+            print("\nUse what?")
 
     def map(self):
         load_map('game_map.txt')
@@ -700,6 +707,7 @@ def parse_file(filename, key, target):
         except KeyError:
             return None
 
+
 def load_map(filename):
     player = Players.get_player('player')
     rooms = set(player.discovered_rooms)
@@ -711,10 +719,11 @@ def load_map(filename):
                     line[line.index(element)] = ''.join(
                         [c if not c.isalnum() else ' ' for c in element])
                 elif element.strip().lower() == player.current_room.name:
-                    line[line.index(element)] = 'PLAYER' + ' ' * (len(element) - 6)
+                    line[line.index(element)] = 'PLAYER' + \
+                        ' ' * (len(element) - 6)
         print()
         for line in file:
-            print('|'.join(line), end = '')
+            print('|'.join(line), end='')
             time.sleep(.04)
 
 
@@ -724,15 +733,17 @@ def readme(filename):
         print(file)
     input("Press enter to continue\n>  ")
 
+
 def get_graphics(filename, target):
     with open(filename, 'r') as f:
         file = f.readlines()
         print_line = False
         for line in file:
             if target in line:
-                    print_line = not print_line
+                print_line = not print_line
             elif print_line == True:
-                print(line, end = '')
+                print(line, end='')
+
 
 def death(message):
     print(message)
